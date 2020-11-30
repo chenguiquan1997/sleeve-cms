@@ -63,7 +63,7 @@ public class RestExceptionHandler {
             log.error("", exception);
         } else {
             unifyResponse.setMessage(errorMessage);
-            log.error("", exception.getClass().getConstructor(int.class, String.class).newInstance(code, errorMessage));
+            //log.error("", exception.getClass().getConstructor(int.class, String.class).newInstance(code, errorMessage));
         }
         return unifyResponse;
     }

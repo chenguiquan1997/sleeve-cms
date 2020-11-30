@@ -18,7 +18,7 @@ public class FileProperties {
     private static final String[] DEFAULT_EMPTY_ARRAY = new String[0];
 
     private String storeDir = "/assets";
-
+    //单一的文件大小限制
     private String singleLimit = "2MB";
 
     private Integer nums = 10;

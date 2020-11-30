@@ -28,7 +28,7 @@ mybatis-plus:
       logic-delete-value: NOW()
       logic-not-delete-value: 'NULL'
   # mapper路径位置
-  mapper-locations: classpath:mapper/*.xml
+  mapper-locations: classpath:mapper/*.xml,classpath:mapper/my/*.xml
 
 
 lin:

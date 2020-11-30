@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.talelin.latticy.mapper.my.CategoryMapper">
+
+    <resultMap id="BaseResultMap" type="io.github.talelin.latticy.model.my.Category">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="is_root" jdbcType="BOOLEAN" property="isRoot"/>
+        <result column="online" jdbcType="BOOLEAN" property="online"/>
+        <result column="parent_id" jdbcType="BIGINT" property="parentId"/>
+        <result column="img" jdbcType="VARCHAR" property="img"/>
+        <result column="level" jdbcType="INTEGER" property="level"/>
+        <result column="idx" jdbcType="INTEGER" property="idx"/>
+        <result column="grid_img" jdbcType="VARCHAR" property="gridImg"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="delete_time" jdbcType="TIMESTAMP" property="deleteTime"/>
+    </resultMap>
+
+    <!-- 分页查询一级分类-->
+    <select id="searchAllOneLevelCategories" resultMap="BaseResultMap">
+      select id, `name`, description, online, is_root, img, `level`
+      from category
+      where is_root = 1 and delete_time is null
+      limit #{page}, #{size}
+    </select>
+
+    <!--获取一级分类的数量-->
+    <select id="getOneLevelCategoryCount" resultType="java.lang.Integer">
+        select count(*)
+        from category
+        where is_root = 1 and delete_time is null
+    </select>
+
+    <!--根据父级分类id，查询所属二级分类数据，分页查询-->
+    <select id="searchTwoLevelByParentId" resultMap="BaseResultMap">
+        select id, `name`, description, online, img, `level`
+        from category
+        where parent_id = #{parentId} and delete_time is null
+        limit #{page}, #{size}
+    </select>
+
+    <!--获取指定商品一级分类的二级分类总数量-->
+    <select id="getTwoLevelCategoryCount" resultType="java.lang.Integer">
+        select count(*)
+        from category
+        where `level` = 2 and parent_id = #{parentId} and delete_time is null
+    </select>
+
+    <!--逻辑删除商品分类数据-->
+    <update id="logicalDeleteById">
+        update category
+        set delete_time = #{currTime}
+        where id = #{id}
+    </update>
+
+    <!--获取六宫格数据-->
+    <select id="searchGrid" resultMap="BaseResultMap">
+        select *
+        from category
+        where is_grid = 1 and is_root = 1 and delete_time is null
+    </select>
+
+    <!--将指定分类从六宫格中剔除掉-->
+    <update id="removeCategryFromGrid">
+        update category
+        set is_grid = 0
+        where id = #{categoryId} and is_root = 1
+    </update>
+
+    <!--将指定分类加入到六宫格中-->
+    <update id="addCategryToGrid">
+        update category
+        set is_grid = 1
+        where id = #{categoryId} and is_root = 1
+    </update>
+
+    <!--查询六宫格内，当前拥有商品分类的数量-->
+    <select id="searchCategoryCountFromGrid" resultType="java.lang.Integer">
+        select count(*)
+        from category
+        where is_root = 1 and is_grid = 1 and delete_time is null
+    </select>
+
+
+</mapper>

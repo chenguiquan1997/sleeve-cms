@@ -17,12 +17,21 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class PageResponseVO<T> {
-
+    /**
+     * 总的数据记录数量
+     */
     private Integer total;
-
+    /**
+     * 记录对象集合
+     */
     private List<T> items;
-
+    /**
+     * 当前数据的页码
+     */
     private Integer page;
-
+    /**
+     * 每页展示的记录条数
+     */
     private Integer count;
+
 }

@@ -44,11 +44,13 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileDO> implements 
     public List<FileBO> upload(MultiValueMap<String, MultipartFile> fileMap) {
         List<FileBO> res = new ArrayList<>();
         uploader.upload(fileMap, file -> {
+            //通过 Md5 查看当前数据库中是否存在当前图片
             FileDO found = this.baseMapper.selectByMd5(file.getMd5());
             // 数据库中不存在
             if (found == null) {
                 FileDO fileDO = new FileDO();
                 BeanUtil.copyProperties(file, fileDO);
+                //将当前图片信息数据插入数据库
                 this.getBaseMapper().insert(fileDO);
                 res.add(transformDoToBo(fileDO, file.getKey()));
                 return true;

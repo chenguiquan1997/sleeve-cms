@@ -45,6 +45,12 @@ public abstract class AbstractUploader implements Uploader {
         return res;
     }
 
+    /**
+     * 对文件进行预处理，包括对类型限制，体积大小限制的校验，以及生成MD5
+     * @param res
+     * @param singleFileLimit
+     * @param file
+     */
     private void handleOneFile0(List<File> res, long singleFileLimit, MultipartFile file) {
         byte[] bytes = getFileBytes(file);
         String[] include = getFileProperties().getInclude();
@@ -73,6 +79,10 @@ public abstract class AbstractUploader implements Uploader {
         }
     }
 
+    /**
+     * 获取单个上传文件的最大上传体积
+     * @return
+     */
     private long getSingleFileLimit() {
         String singleLimit = getFileProperties().getSingleLimit();
         return FileUtil.parseSize(singleLimit);
@@ -123,6 +133,7 @@ public abstract class AbstractUploader implements Uploader {
         if (fileMap.isEmpty()) {
             throw new NotFoundException(10026);
         }
+        //获取配置文件中，允许每次上传时，最大的文件上传数量
         int nums = getFileProperties().getNums();
         if (fileMap.size() > nums) {
             throw new FileTooManyException(10121);

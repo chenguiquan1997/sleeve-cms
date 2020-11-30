@@ -17,6 +17,11 @@ public class Page<T> extends com.baomidou.mybatisplus.extension.plugins.paginati
         super.setCurrent(0);
     }
 
+    /**
+     *
+     * @param current 代表当前页码
+     * @param size 每页查询多少条数据
+     */
     public Page(int current, int size) {
         this(current, size, 0);
     }
