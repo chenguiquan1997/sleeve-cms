@@ -12,6 +12,10 @@ spring:
   resources:
     # 关闭静态资源的映射
     add-mappings: false
+  jackson:
+    time-zone: GMT+8 #jackson默认的时区比本地时区少8个小时，需要重新设置
+    serialization:
+      write-dates-as-timestamps: true #配置以时间戳的形式序列化返回时间
 
 
 mybatis-plus:

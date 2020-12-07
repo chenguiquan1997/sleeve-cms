@@ -8,6 +8,7 @@ import io.github.talelin.latticy.service.imy.ICategoryService;
 import io.github.talelin.latticy.vo.CreatedVO;
 import io.github.talelin.latticy.vo.DeletedVO;
 import io.github.talelin.latticy.vo.UpdatedVO;
+import io.github.talelin.latticy.vo.my.CategoryVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -17,6 +18,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -103,8 +105,17 @@ public class CategoryController {
      * @return
      */
     @GetMapping("/grid")
-    public List<Category> searchGrid() {
-        return categoryService.searchGrid();
+    public List<CategoryVO> searchGrid() {
+        List<Category> categories = categoryService.searchGrid();
+        List<CategoryVO> categoryVOS = new ArrayList<>();
+        if(categories == null || categories.size() <1) {
+            return categoryVOS;
+        }
+        for(Category c : categories) {
+            CategoryVO categoryVO = new CategoryVO(c);
+            categoryVOS.add(categoryVO);
+        }
+        return categoryVOS;
     }
 
     /**

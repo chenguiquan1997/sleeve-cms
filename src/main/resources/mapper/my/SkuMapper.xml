@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.talelin.latticy.mapper.my.SkuMapper">
+
+    <!--spu基本映射结果集-->
+    <resultMap id="BaseResultMap" type="io.github.talelin.latticy.model.my.Sku">
+        <id column="id" property="id"></id>
+        <result column="price" property="price"></result>
+        <result column="discount_price" property="discountPrice"></result>
+        <result column="online" property="online"></result>
+        <result column="img" property="img"></result>
+        <result column="title" property="title"></result>
+        <result column="spu_id" property="spuId"></result>
+        <result column="specs" property="specs"></result>
+        <result column="code" property="code"></result>
+        <result column="stock" property="stock"></result>
+        <result column="category_id" property="categoryId"></result>
+        <result column="root_category_id" property="rootCategoryId"></result>
+        <result column="create_time" property="createTime"></result>
+        <result column="update_time" property="updateTime"></result>
+        <result column="delete_time" property="deleteTime"></result>
+    </resultMap>
+
+    <select id="searchSkuListBySpuId" resultType="java.util.HashMap">
+        select sku.id, sku.title
+        from sku
+        where sku.spu_id = #{spuId}
+    </select>
+
+
+
+</mapper>
