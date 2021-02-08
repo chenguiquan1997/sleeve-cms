@@ -35,7 +35,9 @@ public class QiniuUploader extends AbstractUploader {
 
     @Value("${lin.file.qiniuyun.bucket}")
     private String bucket;
-
+    /**
+     * 七牛内置上传管理器
+     */
     private UploadManager uploadManager;
 
     private String upToken;

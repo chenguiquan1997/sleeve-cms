@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.talelin.latticy.mapper.my.SpecValueMapper">
+
+    <resultMap id="BaseResultMap" type="io.github.talelin.latticy.model.my.SpecValue">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="value" jdbcType="VARCHAR" property="value"/>
+        <result column="key_id" jdbcType="BIGINT" property="keyId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="delete_time" jdbcType="TIMESTAMP" property="deleteTime"/>
+    </resultMap>
+
+    <!--根据规格名，分页查询对应的规格值-->
+    <select id="searchAllSpecValueByKey" resultMap="BaseResultMap">
+      select * from spec_value
+      where delete_time is null and key_id = #{keyId}
+    </select>
+
+</mapper>

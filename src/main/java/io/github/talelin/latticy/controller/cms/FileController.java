@@ -31,7 +31,7 @@ public class FileController {
      * @return 文件信息
      */
     @PostMapping
-    @LoginRequired
+   // @LoginRequired
     public List<FileBO> upload(MultipartHttpServletRequest multipartHttpServletRequest) {
         MultiValueMap<String, MultipartFile> fileMap =
                 multipartHttpServletRequest.getMultiFileMap();

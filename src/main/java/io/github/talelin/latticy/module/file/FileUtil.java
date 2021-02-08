@@ -12,7 +12,10 @@ import java.nio.file.Path;
  * @author pedro@TaleLin
  */
 public class FileUtil {
-
+    /**
+     * 获取一个默认的存储文件的位置
+     * @return
+     */
     public static FileSystem getDefaultFileSystem() {
         return FileSystems.getDefault();
     }
@@ -59,10 +62,20 @@ public class FileUtil {
         return filename.substring(index);
     }
 
+    /**
+     * 生成当前文件的MD5
+     * @param bytes
+     * @return
+     */
     public static String getFileMD5(byte[] bytes) {
         return DigestUtils.md5DigestAsHex(bytes);
     }
 
+    /**
+     * 将文件大小的单位，转化成为2进制
+     * @param size
+     * @return
+     */
     public static Long parseSize(String size) {
         DataSize singleLimitData = DataSize.parse(size);
         return singleLimitData.toBytes();

@@ -36,9 +36,11 @@ public class LocalUploader extends AbstractUploader {
 
     @Override
     protected boolean handleOneFile(byte[] bytes, String newFilename) {
+        //获取存储文件的绝对路径
         String absolutePath =
                 FileUtil.getFileAbsolutePath(fileProperties.getStoreDir(), getStorePath(newFilename));
         try {
+            //将文件数据写入指定文件夹
             BufferedOutputStream stream =
                     new BufferedOutputStream(new FileOutputStream(new java.io.File(absolutePath)));
             stream.write(bytes);
@@ -56,6 +58,11 @@ public class LocalUploader extends AbstractUploader {
         return fileProperties;
     }
 
+    /**
+     * 根据每一天来创建文件夹
+     * @param newFilename 文件名
+     * @return
+     */
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     protected String getStorePath(String newFilename) {

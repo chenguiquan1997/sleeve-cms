@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.talelin.latticy.mapper.my.SpuMapper">
+
+    <!--spu基本映射结果集-->
+    <resultMap id="BaseResultMap" type="io.github.talelin.latticy.model.my.Spu">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="subtitle" property="subtitle"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="root_category_id" property="rootCategoryId"/>
+        <result column="online" property="online"/>
+        <result column="price" property="price"/>
+        <result column="sketch_spec_id" property="sketchSpecId"/>
+        <result column="default_sku_id" property="defaultSkuId"/>
+        <result column="img" property="img"/>
+        <result column="discount_price" property="discountPrice"/>
+        <result column="description" property="description"/>
+        <result column="tags" property="tags"/>
+        <result column="is_test" property="isTest"/>
+        <result column="spu_theme_img" property="spuThemeImg"/>
+        <result column="for_theme_img" property="forThemeImg"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="delete_time" property="deleteTime"/>
+    </resultMap>
+
+    <!--spu概要映射结果集-->
+    <resultMap id="SpuOutlineResultMap" type="io.github.talelin.latticy.model.my.SpuOutline" extends="BaseResultMap">
+        <result column="name" jdbcType="VARCHAR" property="categoryName"></result>
+    </resultMap>
+
+    <!--spu详情映射结果集-->
+    <resultMap id="SpuDetailResultMap" type="io.github.talelin.latticy.model.my.SpuDetail" extends="BaseResultMap">
+        <result column="category_name" property="categoryName"></result>
+        <result column="default_sku" property="defaultSku"></result>
+        <!--轮播图集合，ofType是实体类中相应字段的类型，必须添加，否则会报空指针异常-->
+        <collection property="forThemeImgs" ofType="java.lang.String">
+            <constructor>
+                <arg column="for_theme_img"></arg>
+            </constructor>
+        </collection>
+        <!--详情图集合-->
+        <collection property="spuDetailImgs" ofType="java.lang.String">
+            <constructor>
+                <arg column="spu_detail_img"></arg>
+            </constructor>
+        </collection>
+    </resultMap>
+
+    <!--分页查询spu概要-->
+    <select id="searchSpuOutline" resultMap="SpuOutlineResultMap">
+      select s.id, s.title, s.subtitle, s.online, s.price, s.discount_price, s.img, s.category_id, s.create_time,
+             c.name
+      from spu s
+      join category c on s.category_id = c.id
+      where s.delete_time is null
+    </select>
+
+    <!--根据spuid查询指定spu详情数据-->
+    <select id="searchSpuDetailById" resultMap="SpuDetailResultMap">
+        select spu.*,
+               c.name as category_name,
+               sku.title as default_sku,
+               img.img as for_theme_img,
+               sdimg.img as spu_detail_img
+        from spu
+        join category c on spu.category_id = c.id
+        join sku on spu.default_sku_id = sku.id
+        join spu_img img on spu.id = img.spu_id
+        join spu_detail_img sdimg on spu.id = sdimg.spu_id
+        where spu.id = #{spuId}
+    </select>
+
+    <!--根据spuId查询当前spu所拥有的所有规格-->
+    <select id="searchSpecBySpuId" resultType="java.util.HashMap">
+       select spke.id, spke.name
+       from spu_key spk
+       join spec_key spke on spk.spec_key_id = spke.id
+       where spk.spu_id = #{spuId}
+    </select>
+
+
+
+</mapper>
