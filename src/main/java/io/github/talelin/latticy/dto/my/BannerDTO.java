@@ -1,4 +1,4 @@
-package io.github.talelin.latticy.dto;
+package io.github.talelin.latticy.dto.my;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;

@@ -7,7 +7,7 @@ import io.github.talelin.autoconfigure.exception.NotFoundException;
 import io.github.talelin.latticy.bo.BannerItemsBO;
 import io.github.talelin.latticy.common.exception.UpdateException;
 import io.github.talelin.latticy.common.mybatis.Page;
-import io.github.talelin.latticy.dto.BannerDTO;
+import io.github.talelin.latticy.dto.my.BannerDTO;
 import io.github.talelin.latticy.mapper.my.BannerItemMapper;
 import io.github.talelin.latticy.mapper.my.BannerMapper;
 import io.github.talelin.latticy.model.my.Banner;
@@ -58,7 +58,6 @@ public class BannerServiceImpl implements IBannerService {
         BeanUtils.copyProperties(bannerDTO,banner);
         //修改成功，返回的结果为1,修改失败，返回结果0
         int result = bannerMapper.updateById(banner);
-        //System.out.println("返回结果："+result);
         if(result != 1) {
             throw new UpdateException(20001);
         }

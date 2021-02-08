@@ -15,7 +15,7 @@
 
     <!---->
     <select id="searchAllBanner" resultMap="BaseResultMap">
-      select * from banner
+      select * from banner where delete_time is null
     </select>
 
 </mapper>

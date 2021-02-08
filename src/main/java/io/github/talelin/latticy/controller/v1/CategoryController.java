@@ -1,7 +1,7 @@
 package io.github.talelin.latticy.controller.v1;
 
 import io.github.talelin.latticy.common.util.CommonUtils;
-import io.github.talelin.latticy.dto.CategoryDTO;
+import io.github.talelin.latticy.dto.my.CategoryDTO;
 import io.github.talelin.latticy.model.my.Category;
 import io.github.talelin.latticy.model.my.Page;
 import io.github.talelin.latticy.service.imy.ICategoryService;

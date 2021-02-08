@@ -1,5 +1,6 @@
 package io.github.talelin.latticy.bo;
 
+import io.github.talelin.latticy.common.enumeration.my.BannerItemTypeEnum;
 import io.github.talelin.latticy.model.my.Banner;
 import io.github.talelin.latticy.model.my.BannerItem;
 import lombok.Data;
@@ -24,6 +25,13 @@ public class BannerItemsBO {
 
     public BannerItemsBO(Banner banner, List<BannerItem> bannerItems) {
         BeanUtils.copyProperties(banner,this);
+//        bannerItems.forEach(bannerItem -> {
+//            Integer typeCode = Integer.valueOf(bannerItem.getType());
+//            BannerItemTypeEnum typeEnum = BannerItemTypeEnum.getType(typeCode);
+//            if(typeEnum != null) {
+//                bannerItem.setTypeName(typeEnum.getValue());
+//            }
+//        });
         this.bannerItems = bannerItems;
     }
 }

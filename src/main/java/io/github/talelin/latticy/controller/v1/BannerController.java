@@ -5,7 +5,7 @@ import io.github.talelin.latticy.bo.BannerItemsBO;
 import io.github.talelin.latticy.common.exception.SaveException;
 import io.github.talelin.latticy.common.mybatis.Page;
 import io.github.talelin.latticy.common.util.PageUtil;
-import io.github.talelin.latticy.dto.BannerDTO;
+import io.github.talelin.latticy.dto.my.BannerDTO;
 import io.github.talelin.latticy.model.my.Banner;
 import io.github.talelin.latticy.service.imy.IBannerService;
 import io.github.talelin.latticy.vo.CreatedVO;
@@ -21,9 +21,10 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
 
-//必须加当前注解，参数上的校验注解才可以生效,并且这个注解需要加到class上,它就如同一个校验的开关一样
+
 @RestController
 @RequestMapping("v1/banner")
+//必须加当前注解，参数上的校验注解才可以生效,并且这个注解需要加到class上,它就如同一个校验的开关一样
 @Validated
 public class BannerController {
 

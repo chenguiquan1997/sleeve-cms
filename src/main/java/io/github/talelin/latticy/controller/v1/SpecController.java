@@ -1,18 +1,15 @@
 package io.github.talelin.latticy.controller.v1;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.github.talelin.latticy.common.util.CommonUtils;
 import io.github.talelin.latticy.common.util.PageUtil;
-import io.github.talelin.latticy.dto.SpecKeyDTO;
-import io.github.talelin.latticy.dto.SpecValueDTO;
-import io.github.talelin.latticy.model.my.Page;
+import io.github.talelin.latticy.dto.my.SpecKeyDTO;
+import io.github.talelin.latticy.dto.my.SpecValueDTO;
 import io.github.talelin.latticy.model.my.SpecKey;
 import io.github.talelin.latticy.model.my.SpecValue;
 import io.github.talelin.latticy.service.imy.ISpecKeyService;
 import io.github.talelin.latticy.service.imy.ISpecValueService;
 import io.github.talelin.latticy.vo.CreatedVO;
 import io.github.talelin.latticy.vo.PageResponseVO;
-import net.sf.jsqlparser.statement.create.view.CreateView;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -22,7 +19,6 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
-import java.util.Map;
 
 @RequestMapping("/v1/spec")
 @RestController
