@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="io.github.talelin.latticy.mapper.my.BannerMapper">
+<mapper namespace="io.github.talelin.latticy.mapper.my.BannerItemMapper">
 
-    <resultMap id="BaseResultMap" type="io.github.talelin.latticy.model.my.Banner">
+    <resultMap id="BaseResultMap" type="io.github.talelin.latticy.model.my.BannerItem">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="title" jdbcType="VARCHAR" property="title"/>
@@ -13,13 +13,9 @@
         <result column="delete_time" jdbcType="TIMESTAMP" property="deleteTime"/>
     </resultMap>
 
-    <!---->
-    <select id="searchAllBanner" resultMap="BaseResultMap">
-      select * from banner where delete_time is null
-    </select>
-
-    <update id="removeBannerById">
-        update banner set delete_time = now() where id = #{id} and delete_time is null
+    <!--根据id 逻辑删除 banner-item-->
+    <update id="removeItemById">
+        update banner_item set delete_time = now() where id = #{id} and delete_time is null
     </update>
 
 </mapper>

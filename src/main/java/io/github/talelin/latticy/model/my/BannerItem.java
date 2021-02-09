@@ -1,5 +1,7 @@
 package io.github.talelin.latticy.model.my;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import io.github.talelin.latticy.common.enumeration.my.BannerItemTypeEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,6 +17,7 @@ public class BannerItem extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = -2058694798483785444L;
 
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
     /**
      * 图片地址

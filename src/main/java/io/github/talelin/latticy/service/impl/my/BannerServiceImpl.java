@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.talelin.autoconfigure.exception.NotFoundException;
 import io.github.talelin.latticy.bo.BannerItemsBO;
+import io.github.talelin.latticy.common.exception.DeleteException;
 import io.github.talelin.latticy.common.exception.UpdateException;
 import io.github.talelin.latticy.common.mybatis.Page;
 import io.github.talelin.latticy.dto.my.BannerDTO;
@@ -29,7 +30,7 @@ public class BannerServiceImpl implements IBannerService {
     private BannerItemMapper bannerItemMapper;
 
     /**
-     * 分页查询所有Banner
+     * 分页查询所有 Banner
      * @param page
      * @return
      */
@@ -39,7 +40,9 @@ public class BannerServiceImpl implements IBannerService {
          * queryWrapper ：这个参数的作用是用来自定义SQL的，由于当前接口是查询所有的Banner，所以不需要
          * 传入这个参数
          */
-        IPage<Banner> bannerIPage = bannerMapper.selectPage(page,null);
+        QueryWrapper<Banner> wrapper = new QueryWrapper<>();
+        wrapper.isNull("delete_time");
+        IPage<Banner> bannerIPage = bannerMapper.selectPage(page,wrapper);
         return bannerIPage;
     }
 
@@ -65,7 +68,7 @@ public class BannerServiceImpl implements IBannerService {
     }
 
     /**
-     * 根据id 删除Banner
+     * 根据 id 删除 Banner
      * @param id
      */
     @Override
@@ -74,11 +77,15 @@ public class BannerServiceImpl implements IBannerService {
         if(banner == null) {
             throw new NotFoundException(20000);
         }
-        bannerMapper.deleteById(id);
+        try{
+            bannerMapper.removeBannerById(id);
+        }catch (Exception e) {
+            throw new DeleteException(21002);
+        }
     }
 
     /**
-     * 根据BannerId, 查询Banner所属的BannerItems
+     * 根据 BannerId, 查询 Banner 所属的 BannerItems
      * @param bannerId
      * @return
      */
@@ -89,13 +96,13 @@ public class BannerServiceImpl implements IBannerService {
             throw new NotFoundException(20000);
         }
         QueryWrapper<BannerItem> wrapper = new QueryWrapper<>();
-        wrapper.eq("banner_id",bannerId);
+        wrapper.eq("banner_id",bannerId).isNull("delete_time");
         List<BannerItem> bannerItemList =  bannerItemMapper.selectList(wrapper);
         return new BannerItemsBO(banner,bannerItemList);
     }
 
     /**
-     * 新增Banner
+     * 新增 Banner
      * @param banner
      */
     @Override

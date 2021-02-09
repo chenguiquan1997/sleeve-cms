@@ -22,8 +22,14 @@ public interface IBannerItemService {
     /**
      * 根据 id 删除一个 bannerItem
      * @param id
+     */
+    void remove(Long id);
+
+    /**
+     * 根据 id 查询banner-item
+     * @param id
      * @return
      */
-    boolean remove(Long id);
+    BannerItem searchOneById(Long id);
 
 }

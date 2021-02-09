@@ -2,6 +2,7 @@ package io.github.talelin.latticy.mapper.my;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import io.github.talelin.latticy.model.my.Banner;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,6 +18,12 @@ public interface BannerMapper extends BaseMapper<Banner> {
      * @return
      */
     List<Banner> searchAllBanner();
+
+    /**
+     * 通过 id 逻辑删除当前 banner
+     * @param id
+     */
+    void removeBannerById(@Param("id") Long id);
 
 
 

@@ -69,7 +69,7 @@ public class BannerController {
      * @param id
      * @return
      */
-    @DeleteMapping("/removeBannerBy/{id}")
+    @DeleteMapping("/remove/{id}")
     public DeletedVO removeBannerById(@PathVariable(name = "id") @Positive Long id) {
         bannerService.removeBannerById(id);
         return new DeletedVO(3);
