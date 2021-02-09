@@ -26,5 +26,4 @@ public interface BannerMapper extends BaseMapper<Banner> {
     void removeBannerById(@Param("id") Long id);
 
 
-
 }

@@ -4,6 +4,7 @@ import io.github.talelin.latticy.dto.my.BannerItemDTO;
 import io.github.talelin.latticy.model.my.BannerItem;
 import io.github.talelin.latticy.service.imy.IBannerItemService;
 import io.github.talelin.latticy.service.imy.IBannerItemTypeService;
+
 import io.github.talelin.latticy.vo.CreatedVO;
 import io.github.talelin.latticy.vo.UpdatedVO;
 import io.github.talelin.latticy.vo.my.BannerItemTypeVO;
@@ -15,6 +16,17 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+
+import io.github.talelin.latticy.vo.UpdatedVO;
+import io.github.talelin.latticy.vo.my.BannerItemTypeVO;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -83,5 +95,4 @@ public class BannerItemController {
         }
         return new CreatedVO(21003);
     }
-
 }
