@@ -20,6 +20,6 @@ public interface IBannerService {
      * 保存 banner 数据
      * @param banner
      */
-    Integer saveBanner(Banner banner);
+    void saveBanner(Banner banner);
 
 }

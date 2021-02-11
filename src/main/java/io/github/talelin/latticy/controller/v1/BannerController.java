@@ -14,6 +14,7 @@ import io.github.talelin.latticy.vo.PageResponseVO;
 import io.github.talelin.latticy.vo.UpdatedVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -90,15 +91,11 @@ public class BannerController {
      * @param bannerDTO
      * @return
      */
-    @PostMapping("/saveBanner")
+    @PostMapping("/save")
     public CreatedVO saveBanner(@RequestBody @Validated BannerDTO bannerDTO) {
         Banner banner = new Banner();
         BeanUtils.copyProperties(bannerDTO,banner);
-        try{
-            bannerService.saveBanner(banner);
-        }catch (Exception e) {
-            throw new SaveException(21001);
-        }
+        bannerService.saveBanner(banner);
         return new CreatedVO(1);
     }
 }

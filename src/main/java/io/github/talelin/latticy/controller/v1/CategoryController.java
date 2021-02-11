@@ -39,7 +39,7 @@ public class CategoryController {
     @GetMapping("/all/oneLevel")
     public Page searchOneLevelCategories(@RequestParam(name = "page",defaultValue = "1")
                                          @Min(value = 1) Integer page,
-                                         @RequestParam(name = "size", defaultValue = "20")
+                                         @RequestParam(name = "size", defaultValue = "10")
                                          @Min(value = 3) @Max(value = 30) Integer size) {
         Map<String,Integer> pageMap = CommonUtils.convertPageParams(page,size);
         Page categories = categoryService.searchAllOneLevelCategories(pageMap,size);
