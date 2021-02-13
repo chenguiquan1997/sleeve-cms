@@ -52,6 +52,9 @@ public class QiniuUploader extends AbstractUploader {
         uploadManager = new UploadManager(cfg);
         Auth auth = Auth.create(accessKey, secretKey);
         upToken = auth.uploadToken(bucket);
+        System.out.println("acc: " + accessKey);
+        System.out.println("secret: " + secretKey);
+        System.out.println("bucket: " + bucket);
     }
 
     @Override
@@ -82,6 +85,7 @@ public class QiniuUploader extends AbstractUploader {
         try {
             Response response = uploadManager.put(byteInputStream, newFilename, upToken, null, null);
             log.info(response.toString());
+            System.out.println(response.toString());
             return response.isOK();
         } catch (QiniuException ex) {
             Response r = ex.response;
