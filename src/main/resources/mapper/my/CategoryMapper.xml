@@ -33,9 +33,23 @@
         where is_root = 1 and delete_time is null
     </select>
 
+    <!--根据id查询分类明细-->
+    <select id="getCategoryDetailById" resultMap="BaseResultMap">
+        select id, `name`, description, online, img, `level`, parent_id
+        from category c
+        where id = #{id}  and delete_time is null
+    </select>
+
+    <!--根据父级id,获取父级分类名称-->
+    <select id="searchNameByParentId" resultType="java.lang.String">
+        select `name`
+        from category c
+        where id = #{parentId} and delete_time is null
+    </select>
+
     <!--根据父级分类id，查询所属二级分类数据，分页查询-->
     <select id="searchTwoLevelByParentId" resultMap="BaseResultMap">
-        select id, `name`, description, online, img, `level`
+        select id, `name`, description, online, img, `level`, create_time
         from category
         where parent_id = #{parentId} and delete_time is null
         limit #{page}, #{size}

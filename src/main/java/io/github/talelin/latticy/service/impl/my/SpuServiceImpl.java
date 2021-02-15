@@ -2,7 +2,7 @@ package io.github.talelin.latticy.service.impl.my;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import io.github.talelin.latticy.bo.SpuDetailBO;
+import io.github.talelin.latticy.bo.my.SpuDetailBO;
 import io.github.talelin.latticy.mapper.my.SpuMapper;
 import io.github.talelin.latticy.model.my.SpuDetail;
 import io.github.talelin.latticy.model.my.SpuOutline;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @Service
 public class SpuServiceImpl implements ISpuService {

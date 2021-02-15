@@ -1,5 +1,6 @@
 package io.github.talelin.latticy.controller.v1;
 
+import io.github.talelin.latticy.bo.my.CategoryBO;
 import io.github.talelin.latticy.common.util.CommonUtils;
 import io.github.talelin.latticy.dto.my.CategoryDTO;
 import io.github.talelin.latticy.model.my.Category;
@@ -8,6 +9,7 @@ import io.github.talelin.latticy.service.imy.ICategoryService;
 import io.github.talelin.latticy.vo.CreatedVO;
 import io.github.talelin.latticy.vo.DeletedVO;
 import io.github.talelin.latticy.vo.UpdatedVO;
+import io.github.talelin.latticy.vo.my.CategoryDetailVO;
 import io.github.talelin.latticy.vo.my.CategoryVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,13 +55,12 @@ public class CategoryController {
      * @param parentId
      * @return
      */
-    @GetMapping("/all/twoLevel")
+    @GetMapping("/all/twoLevel/{id}")
     public Page searchTwoLevelCategoriesByParentId(@RequestParam(name = "page",defaultValue = "1")
                                                    @Min(value = 1) Integer page,
                                                    @RequestParam(name = "size", defaultValue = "20")
                                                    @Min(value = 3) @Max(value = 30) Integer size,
-                                                   @RequestParam(name = "parentId")
-                                                   @NotNull @Positive Long parentId) {
+                                                   @PathVariable(name = "id") @NotNull @Positive Long parentId) {
         Map<String,Integer> pageMap = CommonUtils.convertPageParams(page,size);
         Page categories = categoryService.searchAllTwoLevelCategoriesByParentId(pageMap,size,parentId);
         return categories;
@@ -76,6 +77,17 @@ public class CategoryController {
         BeanUtils.copyProperties(categoryDTO,category);
         categoryService.update(category);
         return new UpdatedVO(2);
+    }
+
+    /**
+     * 根据id，查询当前分类的明细
+     * @param id
+     * @return
+     */
+    @RequestMapping("/detail/{id}")
+    public CategoryDetailVO getCategoryDetail(@PathVariable("id") @NotNull @Positive Long id) {
+        CategoryBO bo = categoryService.getCategoryDetailById(id);
+        return new CategoryDetailVO(bo);
     }
 
     /**
@@ -137,5 +149,9 @@ public class CategoryController {
     public CreatedVO addToGrid(@PathVariable(name = "id") @NotNull @Positive Long id) {
         categoryService.addCategoryToGrid(id);
         return new CreatedVO(21004);
+    }
+
+    public void getChildrenCategoryByParentId() {
+
     }
 }

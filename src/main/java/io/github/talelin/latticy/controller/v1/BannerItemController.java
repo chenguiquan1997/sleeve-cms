@@ -66,7 +66,6 @@ public class BannerItemController {
     @RequestMapping("/search/types")
     public List<Map<String,String>> searchItemTypes() {
        List<Map<String,String>> typeList = bannerItemTypeService.searchAll();
-        System.out.println(typeList);
        return typeList;
     }
 

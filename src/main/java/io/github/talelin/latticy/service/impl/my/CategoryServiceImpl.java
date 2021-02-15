@@ -2,6 +2,7 @@ package io.github.talelin.latticy.service.impl.my;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.github.talelin.autoconfigure.exception.NotFoundException;
+import io.github.talelin.latticy.bo.my.CategoryBO;
 import io.github.talelin.latticy.common.exception.AddException;
 import io.github.talelin.latticy.common.exception.DeleteException;
 import io.github.talelin.latticy.common.exception.SaveException;
@@ -10,6 +11,7 @@ import io.github.talelin.latticy.mapper.my.CategoryMapper;
 import io.github.talelin.latticy.model.my.Category;
 import io.github.talelin.latticy.model.my.Page;
 import io.github.talelin.latticy.service.imy.ICategoryService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -179,6 +181,44 @@ public class CategoryServiceImpl implements ICategoryService {
         }else {
             throw new AddException(21003);
         }
+    }
+
+    /**
+     * 根据id查询当前二级分类明细
+     * @param id
+     * @return
+     */
+    @Override
+    public CategoryBO getCategoryDetailById(Long id) {
+        if(id == null  || id <= 0) throw new NotFoundException(22001);
+        Category category = categoryMapper.getCategoryDetailById(id);
+        if(category == null) {
+            throw new NotFoundException(22001);
+        }
+        CategoryBO categoryBO = new CategoryBO();
+        BeanUtils.copyProperties(category,categoryBO);
+        Long parentId = category.getParentId();
+        if(parentId != null) {
+            String name = categoryMapper.searchNameByParentId(parentId);
+            categoryBO.setParentName(name);
+        }else {
+            categoryBO.setParentName(new String("无"));
+        }
+        return categoryBO;
+    }
+
+    /**
+     * 根据父级id,获取父级分类名称
+     * @param parentId
+     * @return
+     */
+    @Override
+    public String searchNameByParentId(Long parentId) {
+        String nullName = new String("无");
+        if(parentId == null  || parentId <= 0) return nullName;
+        String name = categoryMapper.searchNameByParentId(parentId);
+        if(name == null) return nullName;
+        return name;
     }
 
 }

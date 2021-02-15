@@ -72,4 +72,18 @@ public interface CategoryMapper extends BaseMapper<Category> {
      * @return 属于六宫格的分类数量
      */
     Integer searchCategoryCountFromGrid();
+
+    /**
+     * 根据id查询分类明细
+     * @param id
+     * @return
+     */
+    Category getCategoryDetailById(@Param("id") Long id);
+
+    /**
+     * 根据父级id,获取父级分类名称
+     * @param id
+     * @return
+     */
+    String searchNameByParentId(@Param("parentId") Long id);
 }

@@ -1,4 +1,4 @@
-package io.github.talelin.latticy.bo;
+package io.github.talelin.latticy.bo.my;
 
 import io.github.talelin.latticy.model.my.SpuDetail;
 import lombok.AllArgsConstructor;
