@@ -49,7 +49,7 @@ public class CategoryController {
     }
 
     /**
-     * 分页获取二级商品分类数据
+     * 根据父级分类id,分页获取二级商品分类数据
      * @param page
      * @param size
      * @param parentId
@@ -58,7 +58,7 @@ public class CategoryController {
     @GetMapping("/all/twoLevel/{id}")
     public Page searchTwoLevelCategoriesByParentId(@RequestParam(name = "page",defaultValue = "1")
                                                    @Min(value = 1) Integer page,
-                                                   @RequestParam(name = "size", defaultValue = "20")
+                                                   @RequestParam(name = "size", defaultValue = "10")
                                                    @Min(value = 3) @Max(value = 30) Integer size,
                                                    @PathVariable(name = "id") @NotNull @Positive Long parentId) {
         Map<String,Integer> pageMap = CommonUtils.convertPageParams(page,size);
@@ -72,10 +72,8 @@ public class CategoryController {
      * @return
      */
     @PutMapping("/update")
-    public UpdatedVO updateCategoryInfoById(@RequestBody @NotNull CategoryDTO categoryDTO) {
-        Category category = new Category();
-        BeanUtils.copyProperties(categoryDTO,category);
-        categoryService.update(category);
+    public UpdatedVO updateCategoryInfoById(@RequestBody @Validated CategoryDTO categoryDTO) {
+        categoryService.update(categoryDTO);
         return new UpdatedVO(2);
     }
 
@@ -107,9 +105,7 @@ public class CategoryController {
      */
     @PostMapping("/save")
     public void save(@RequestBody @NotNull CategoryDTO categoryDTO) {
-        Category category = new Category();
-        BeanUtils.copyProperties(categoryDTO,category);
-        categoryService.save(category);
+        categoryService.save(categoryDTO);
     }
 
     /**
@@ -119,15 +115,7 @@ public class CategoryController {
     @GetMapping("/grid")
     public List<CategoryVO> searchGrid() {
         List<Category> categories = categoryService.searchGrid();
-        List<CategoryVO> categoryVOS = new ArrayList<>();
-        if(categories == null || categories.size() <1) {
-            return categoryVOS;
-        }
-        for(Category c : categories) {
-            CategoryVO categoryVO = new CategoryVO(c);
-            categoryVOS.add(categoryVO);
-        }
-        return categoryVOS;
+        return CategoryVO.convertTypes(categories);
     }
 
     /**
@@ -151,7 +139,4 @@ public class CategoryController {
         return new CreatedVO(21004);
     }
 
-    public void getChildrenCategoryByParentId() {
-
-    }
 }

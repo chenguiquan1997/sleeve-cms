@@ -35,7 +35,7 @@ public class Category extends BaseEntity implements Serializable {
     /**
      * 当前分类是否为根节点（一级分类）
      */
-    private Boolean isRoot;
+    private Integer isRoot;
     /**
      * 是否上线/是否显示
      */

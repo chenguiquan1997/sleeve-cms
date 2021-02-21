@@ -25,6 +25,10 @@ public class CategoryDetailVO {
      */
     private Long parentId;
     /**
+     * 是否为一级分类
+     */
+    private Integer isRoot;
+    /**
      * 图片
      */
     private String img;
@@ -41,6 +45,12 @@ public class CategoryDetailVO {
      */
     private String parentName;
 
+    /**
+     * @Description: 为当前分类添加LevelName信息
+     * @param categoryBO
+     * @Author: Guiquan Chen
+     * @Date: 2021/2/21
+     */
     public CategoryDetailVO(CategoryBO categoryBO) {
         BeanUtils.copyProperties(categoryBO,this);
         if(categoryBO.getLevel() == 1) {

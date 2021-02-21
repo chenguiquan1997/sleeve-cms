@@ -9,9 +9,11 @@ import io.github.talelin.latticy.common.exception.DeleteException;
 import io.github.talelin.latticy.common.exception.SaveException;
 import io.github.talelin.autoconfigure.exception.NotFoundException;
 import io.github.talelin.latticy.common.exception.UpdateException;
+import io.github.talelin.latticy.dto.my.BannerItemDTO;
 import io.github.talelin.latticy.mapper.my.BannerItemMapper;
 import io.github.talelin.latticy.model.my.BannerItem;
 import io.github.talelin.latticy.service.imy.IBannerItemService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,16 +26,20 @@ public class BannerItemServiceImpl implements IBannerItemService {
     /**
      * 根据id 更新指定 banner-item
      * @param id
-     * @param bannerItem
+     * @param bannerItemDTO
      * @return
      */
     @Override
-    public boolean updateById(Long id, BannerItem bannerItem) {
-        BannerItem item = bannerItemMapper.selectById(id);
-        if(item == null) {
+    public boolean updateById(Long id, BannerItemDTO bannerItemDTO) {
+        BannerItem item = new BannerItem();
+        BeanUtils.copyProperties(bannerItemDTO,item);
+        Integer type = item.getTypeByTypeName(item.getTypeName());
+        item.setType(type);
+        BannerItem item1 = bannerItemMapper.selectById(id);
+        if(item1 == null) {
             throw new NotFoundException(20002);
         }
-        Integer res = bannerItemMapper.updateById(bannerItem);
+        Integer res = bannerItemMapper.updateById(item);
         if(res != 1) {
             throw new UpdateException(20003);
         }
@@ -42,11 +48,13 @@ public class BannerItemServiceImpl implements IBannerItemService {
 
     /**
      * 添加 banner-item
-     * @param bannerItem
+     * @param bannerItemDTO
      * @return
      */
     @Override
-    public boolean save(BannerItem bannerItem) {
+    public boolean save(BannerItemDTO bannerItemDTO) {
+        BannerItem bannerItem = new BannerItem();
+        BeanUtils.copyProperties(bannerItemDTO,bannerItem);
         int res = bannerItemMapper.insert(bannerItem);
         if(res != 1) {
             throw new SaveException(21003);

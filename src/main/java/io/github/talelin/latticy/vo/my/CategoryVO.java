@@ -4,7 +4,9 @@ import io.github.talelin.latticy.model.my.Category;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class CategoryVO {
@@ -55,7 +57,32 @@ public class CategoryVO {
      */
     private Date createTime;
 
+    /**
+     * @Description: 构造方法内部将category转换成categoryVO
+     * @param category
+     * @Author: Guiquan Chen
+     * @Date: 2021/2/21
+     */
     public CategoryVO(Category category) {
         BeanUtils.copyProperties(category,this);
+    }
+
+    /**
+     * @Description: 此方法用于将category集合，转换成cateoryVO集合
+     * @param categories
+     * @return java.util.List<io.github.talelin.latticy.vo.my.CategoryVO>
+     * @Author: Guiquan Chen
+     * @Date: 2021/2/21
+     */
+    public static List<CategoryVO> convertTypes(List<Category> categories) {
+        List<CategoryVO> categoryVOS = new ArrayList<>();
+        if(categories == null || categories.size() <1) {
+            return categoryVOS;
+        }
+        for(Category c : categories) {
+            CategoryVO categoryVO = new CategoryVO(c);
+            categoryVOS.add(categoryVO);
+        }
+        return categoryVOS;
     }
 }

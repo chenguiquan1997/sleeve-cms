@@ -39,10 +39,10 @@ public class BannerController {
      */
     @GetMapping("/all")
     public PageResponseVO<Banner> getAllBanner(@RequestParam(name = "page", required = false, defaultValue = "0")
-                                     @Min(value = 0, message = "{paging.page.min}") Integer pageSize,
+                                     @Min(value = 1, message = "{paging.page.min}") Integer pageSize,
                                      @RequestParam(name = "count", required = false, defaultValue = "20")
                                      @Max(value = 50) @Min(value = 1) Integer count) {
-        Page page = new Page(pageSize,count);
+        Page page = new Page(pageSize-1,count);
         IPage<Banner> bannerPage = bannerService.searchAllBanner(page);
         PageResponseVO<Banner> bannerPageResponseVO = PageUtil.build(bannerPage);
         return bannerPageResponseVO;

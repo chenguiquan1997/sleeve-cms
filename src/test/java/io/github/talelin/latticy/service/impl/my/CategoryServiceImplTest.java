@@ -108,7 +108,7 @@ class CategoryServiceImplTest {
 
     @Test
     void save() {
-        Category c = Category.builder().name("测试save分类").isRoot(true).level(1).build();
+        Category c = Category.builder().name("测试save分类").isRoot(1).level(1).build();
         int res = categoryMapper.insert(c);
         System.out.println("res: "+res);
         Assert.assertEquals(1,res);

@@ -51,11 +51,7 @@ public class BannerItemController {
     public UpdatedVO updateItem(@RequestBody @Validated BannerItemDTO bannerItemDTO,
                                 @PathVariable("id") @NotNull(message = "{id.notNull}")
                                         Long id) {
-        BannerItem item = new BannerItem();
-        BeanUtils.copyProperties(bannerItemDTO,item);
-        Integer type = item.getTypeByTypeName(item.getTypeName());
-        item.setType(type);
-        bannerItemService.updateById(id,item);
+        bannerItemService.updateById(id,bannerItemDTO);
         return new UpdatedVO(2);
     }
 
@@ -86,9 +82,7 @@ public class BannerItemController {
      */
     @PostMapping("/add")
     public CreatedVO addItem(@Validated @RequestBody BannerItemDTO bannerItemDTO) {
-        BannerItem bannerItem = new BannerItem();
-        BeanUtils.copyProperties(bannerItemDTO,bannerItem);
-        Boolean flag = bannerItemService.save(bannerItem);
+        Boolean flag = bannerItemService.save(bannerItemDTO);
         if(flag) {
             return new CreatedVO(21004);
         }

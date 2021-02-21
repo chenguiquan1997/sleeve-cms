@@ -28,12 +28,12 @@ public interface CategoryMapper extends BaseMapper<Category> {
 
     /**
      * 根据父级分类id，查询二级分类
-     * @param page
+     * @param startCount
      * @param size
      * @param parentId
      * @return
      */
-    List<Category> searchTwoLevelByParentId(@Param("page") Integer page,
+    List<Category> searchTwoLevelByParentId(@Param("startCount") Integer startCount,
                                             @Param("size") Integer size,
                                             @Param("parentId") Long parentId);
 

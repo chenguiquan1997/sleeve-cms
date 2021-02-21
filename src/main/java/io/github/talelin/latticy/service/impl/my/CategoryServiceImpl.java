@@ -7,6 +7,7 @@ import io.github.talelin.latticy.common.exception.AddException;
 import io.github.talelin.latticy.common.exception.DeleteException;
 import io.github.talelin.latticy.common.exception.SaveException;
 import io.github.talelin.latticy.common.exception.UpdateException;;
+import io.github.talelin.latticy.dto.my.CategoryDTO;
 import io.github.talelin.latticy.mapper.my.CategoryMapper;
 import io.github.talelin.latticy.model.my.Category;
 import io.github.talelin.latticy.model.my.Page;
@@ -29,6 +30,13 @@ public class CategoryServiceImpl implements ICategoryService {
     @Autowired
     private CategoryMapper categoryMapper;
 
+    /**
+     * @Description: 根据分类id，查询唯一分类数据，每次进行分类数据的修改操作时，都需要先查询以下，有无当前数据
+     * @param id 分类id
+     * @return io.github.talelin.latticy.model.my.Category
+     * @Author: Guiquan Chen
+     * @Date: 2021/2/21
+     */
     public Category queryOneCategoryMock(Long id) {
         QueryWrapper<Category> c = new QueryWrapper<>();
         c.eq("id",id).isNull("delete_time");
@@ -37,8 +45,12 @@ public class CategoryServiceImpl implements ICategoryService {
     }
 
     /**
-     * 查询所有一级分类数据
-     * @return
+     * @Description: 查询所有一级分类数据
+     * @param pageMap sql语句进行分页查询时，需要的两个参数
+     * @param size 当前页数据量
+     * @return io.github.talelin.latticy.model.my.Page
+     * @Author: Guiquan Chen
+     * @Date: 2021/2/21
      */
     @Override
     public Page searchAllOneLevelCategories(Map<String,Integer> pageMap, Integer size) {
@@ -52,7 +64,7 @@ public class CategoryServiceImpl implements ICategoryService {
     }
 
     /**
-     * 分页查询二级分类数据
+     * 根据父级分类id,分页查询二级分类数据
      * @param pageMap
      * @param size
      * @param parentId 父级分类id
@@ -71,9 +83,11 @@ public class CategoryServiceImpl implements ICategoryService {
 
     /**
      * 更新分类数据
-     * @param category
+     * @param categoryDTO
      */
-    public void update(Category category) {
+    public void update(CategoryDTO categoryDTO) {
+        Category category = new Category();
+        BeanUtils.copyProperties(categoryDTO,category);
         Category category1 = this.queryOneCategoryMock(category.getId());
         if(category1 == null) {
             throw new NotFoundException(22001);
@@ -119,11 +133,12 @@ public class CategoryServiceImpl implements ICategoryService {
 
     /**
      * 新增分类
-     * @param category
+     * @param categoryDTO
      */
     @Override
-    public void save(Category category) {
-        //categoryMapper.insert(category);
+    public void save(CategoryDTO categoryDTO) {
+        Category category = new Category();
+        BeanUtils.copyProperties(categoryDTO,category);
         try{
             categoryMapper.insert(category);
         }catch (Exception e) {
@@ -184,7 +199,7 @@ public class CategoryServiceImpl implements ICategoryService {
     }
 
     /**
-     * 根据id查询当前二级分类明细
+     * 根据id查询当前分类详情
      * @param id
      * @return
      */

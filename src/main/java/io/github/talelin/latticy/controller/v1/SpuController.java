@@ -26,7 +26,7 @@ public class SpuController {
     /**
      * 分页查询Spu概要信息
      * @param page 页码
-     * @param count 当前页记录数量
+     * @param count 当前页数据量
      * @return
      */
     @GetMapping("/outline/all")
