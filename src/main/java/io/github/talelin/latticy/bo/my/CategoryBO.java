@@ -23,6 +23,10 @@ public class CategoryBO {
      */
     private Long parentId;
     /**
+     * 是否为一级分类
+     */
+    private Integer isRoot;
+    /**
      * 图片
      */
     private String img;

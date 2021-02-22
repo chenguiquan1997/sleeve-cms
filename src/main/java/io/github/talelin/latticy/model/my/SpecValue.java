@@ -4,8 +4,12 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class SpecValue extends BaseEntity{
+public class SpecValue extends BaseEntity implements Serializable {
+
+    private static final long serialVersionUID = 4713319006358687657L;
     /**
      * id
      */

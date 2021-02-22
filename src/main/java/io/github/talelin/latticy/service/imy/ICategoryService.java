@@ -2,6 +2,7 @@ package io.github.talelin.latticy.service.imy;
 
 import io.github.talelin.latticy.bo.my.CategoryBO;
 import io.github.talelin.latticy.dto.my.CategoryDTO;
+import io.github.talelin.latticy.dto.my.CategorySaveDTO;
 import io.github.talelin.latticy.model.my.Category;
 import io.github.talelin.latticy.model.my.Page;
 import org.apache.ibatis.annotations.Param;
@@ -20,7 +21,7 @@ public interface ICategoryService {
 
     void delete(Long id);
 
-    void save(CategoryDTO categoryDTO);
+    void save(CategorySaveDTO categorySaveDTO);
 
     List<Category> searchGrid();
 

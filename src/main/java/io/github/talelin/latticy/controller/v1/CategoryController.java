@@ -3,6 +3,7 @@ package io.github.talelin.latticy.controller.v1;
 import io.github.talelin.latticy.bo.my.CategoryBO;
 import io.github.talelin.latticy.common.util.CommonUtils;
 import io.github.talelin.latticy.dto.my.CategoryDTO;
+import io.github.talelin.latticy.dto.my.CategorySaveDTO;
 import io.github.talelin.latticy.model.my.Category;
 import io.github.talelin.latticy.model.my.Page;
 import io.github.talelin.latticy.service.imy.ICategoryService;
@@ -35,16 +36,16 @@ public class CategoryController {
     /**
      * 分页获取一级分类数据
      * @param page 当前页
-     * @param size 每页查询数量
+     * @param count 每页查询数据量
      * @return
      */
     @GetMapping("/all/oneLevel")
     public Page searchOneLevelCategories(@RequestParam(name = "page",defaultValue = "1")
                                          @Min(value = 1) Integer page,
-                                         @RequestParam(name = "size", defaultValue = "10")
-                                         @Min(value = 3) @Max(value = 30) Integer size) {
-        Map<String,Integer> pageMap = CommonUtils.convertPageParams(page,size);
-        Page categories = categoryService.searchAllOneLevelCategories(pageMap,size);
+                                         @RequestParam(name = "count", defaultValue = "10")
+                                         @Min(value = 3) @Max(value = 30) Integer count) {
+        Map<String,Integer> pageMap = CommonUtils.convertPageParams(page,count);
+        Page categories = categoryService.searchAllOneLevelCategories(pageMap,count);
         return categories;
     }
 
@@ -101,11 +102,12 @@ public class CategoryController {
 
     /**
      * 新增分类
-     * @param categoryDTO
+     * @param categorySaveDTO
      */
     @PostMapping("/save")
-    public void save(@RequestBody @NotNull CategoryDTO categoryDTO) {
-        categoryService.save(categoryDTO);
+    public CreatedVO save(@RequestBody @Validated CategorySaveDTO categorySaveDTO) {
+        categoryService.save(categorySaveDTO);
+        return new CreatedVO(1);
     }
 
     /**
@@ -137,6 +139,18 @@ public class CategoryController {
     public CreatedVO addToGrid(@PathVariable(name = "id") @NotNull @Positive Long id) {
         categoryService.addCategoryToGrid(id);
         return new CreatedVO(21004);
+    }
+
+    /**
+     * @Description: 根据id,获取分类名称
+     * @param id 分类id
+     * @return java.lang.String
+     * @Author: Guiquan Chen
+     * @Date: 2021/2/22
+     */
+    @RequestMapping("/name/{id}")
+    public String searchParentCategoryName(@PathVariable("id") @NotNull @Positive Long id) {
+       return categoryService.searchNameByParentId(id);
     }
 
 }

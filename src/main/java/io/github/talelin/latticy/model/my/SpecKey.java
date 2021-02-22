@@ -6,11 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SpecKey extends BaseEntity{
+public class SpecKey extends BaseEntity implements Serializable {
 
+    private static final long serialVersionUID = -5349274517606575017L;
     /**
      * id
      */

@@ -8,6 +8,7 @@ import io.github.talelin.latticy.common.exception.DeleteException;
 import io.github.talelin.latticy.common.exception.SaveException;
 import io.github.talelin.latticy.common.exception.UpdateException;;
 import io.github.talelin.latticy.dto.my.CategoryDTO;
+import io.github.talelin.latticy.dto.my.CategorySaveDTO;
 import io.github.talelin.latticy.mapper.my.CategoryMapper;
 import io.github.talelin.latticy.model.my.Category;
 import io.github.talelin.latticy.model.my.Page;
@@ -86,6 +87,14 @@ public class CategoryServiceImpl implements ICategoryService {
      * @param categoryDTO
      */
     public void update(CategoryDTO categoryDTO) {
+        // 不是一级分类，但是父级分类 id 为空
+        if(categoryDTO.getIsRoot() != 1 && categoryDTO.getParentId() == null) {
+            throw new UpdateException(22004);
+        }
+        //是一级分类，但是父级分类 id 不为空
+        else if(categoryDTO.getIsRoot() == 1 && categoryDTO.getParentId() != null) {
+            throw new UpdateException(22005);
+        }
         Category category = new Category();
         BeanUtils.copyProperties(categoryDTO,category);
         Category category1 = this.queryOneCategoryMock(category.getId());
@@ -133,12 +142,20 @@ public class CategoryServiceImpl implements ICategoryService {
 
     /**
      * 新增分类
-     * @param categoryDTO
+     * @param categorySaveDTO
      */
     @Override
-    public void save(CategoryDTO categoryDTO) {
+    public void save(CategorySaveDTO categorySaveDTO) {
+        // 不是一级分类，但是父级分类 id 为空
+        if(categorySaveDTO.getIsRoot() != 1 && categorySaveDTO.getParentId() == null) {
+            throw new SaveException(22004);
+        }
+        //是一级分类，但是父级分类 id 不为空
+        else if(categorySaveDTO.getIsRoot() == 1 && categorySaveDTO.getParentId() != null) {
+            throw new SaveException(22005);
+        }
         Category category = new Category();
-        BeanUtils.copyProperties(categoryDTO,category);
+        BeanUtils.copyProperties(categorySaveDTO,category);
         try{
             categoryMapper.insert(category);
         }catch (Exception e) {
@@ -223,7 +240,7 @@ public class CategoryServiceImpl implements ICategoryService {
     }
 
     /**
-     * 根据父级id,获取父级分类名称
+     * 根据id,获取分类名称
      * @param parentId
      * @return
      */
