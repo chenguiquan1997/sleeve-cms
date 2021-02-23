@@ -1,8 +1,7 @@
 package io.github.talelin.latticy.controller.v1;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.github.talelin.latticy.bo.BannerItemsBO;
-import io.github.talelin.latticy.common.exception.SaveException;
+import io.github.talelin.latticy.bo.my.BannerItemsBO;
 import io.github.talelin.latticy.common.mybatis.Page;
 import io.github.talelin.latticy.common.util.PageUtil;
 import io.github.talelin.latticy.dto.my.BannerDTO;
@@ -40,10 +39,10 @@ public class BannerController {
      */
     @GetMapping("/all")
     public PageResponseVO<Banner> getAllBanner(@RequestParam(name = "page", required = false, defaultValue = "0")
-                                     @Min(value = 0, message = "{paging.page.min}") Integer pageSize,
+                                     @Min(value = 1, message = "{paging.page.min}") Integer pageSize,
                                      @RequestParam(name = "count", required = false, defaultValue = "20")
                                      @Max(value = 50) @Min(value = 1) Integer count) {
-        Page page = new Page(pageSize,count);
+        Page page = new Page(pageSize-1,count);
         IPage<Banner> bannerPage = bannerService.searchAllBanner(page);
         PageResponseVO<Banner> bannerPageResponseVO = PageUtil.build(bannerPage);
         return bannerPageResponseVO;
@@ -90,15 +89,11 @@ public class BannerController {
      * @param bannerDTO
      * @return
      */
-    @PostMapping("/saveBanner")
+    @PostMapping("/save")
     public CreatedVO saveBanner(@RequestBody @Validated BannerDTO bannerDTO) {
         Banner banner = new Banner();
         BeanUtils.copyProperties(bannerDTO,banner);
-        try{
-            bannerService.saveBanner(banner);
-        }catch (Exception e) {
-            throw new SaveException(21001);
-        }
+        bannerService.saveBanner(banner);
         return new CreatedVO(1);
     }
 }

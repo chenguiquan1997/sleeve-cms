@@ -2,23 +2,20 @@ package io.github.talelin.latticy.dto.my;
 
 import lombok.Data;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 /**
  * @Author Guiquan Chen
  * @Date 2021/2/22 14:56
  * @Version 1.0
- * 当前类用于更新分类时，接收前端的数据
+ * 当前类用于新增分类时，接收前端的数据
  */
 @Data
-public class CategoryDTO {
+public class CategorySaveDTO {
 
-    /**
-     * id
-     */
-    @NotNull
-    @Positive
-    private Long id;
     /**
      * 分类名称
      */
@@ -58,6 +55,5 @@ public class CategoryDTO {
      */
     @NotNull
     private Integer level;
-
 
 }

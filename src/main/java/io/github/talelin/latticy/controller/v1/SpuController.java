@@ -1,7 +1,7 @@
 package io.github.talelin.latticy.controller.v1;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.github.talelin.latticy.bo.SpuDetailBO;
+import io.github.talelin.latticy.bo.my.SpuDetailBO;
 import io.github.talelin.latticy.common.util.CommonUtils;
 import io.github.talelin.latticy.common.util.PageUtil;
 import io.github.talelin.latticy.model.my.SpuOutline;
@@ -26,7 +26,7 @@ public class SpuController {
     /**
      * 分页查询Spu概要信息
      * @param page 页码
-     * @param count 当前页记录数量
+     * @param count 当前页数据量
      * @return
      */
     @GetMapping("/outline/all")

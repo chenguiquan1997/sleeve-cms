@@ -1,7 +1,7 @@
 package io.github.talelin.latticy.service.imy;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.github.talelin.latticy.bo.SpuDetailBO;
+import io.github.talelin.latticy.bo.my.SpuDetailBO;
 import io.github.talelin.latticy.model.my.SpuOutline;
 
 import java.util.List;

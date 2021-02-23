@@ -20,7 +20,7 @@ public class Category extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 6898278172178595160L;
     /**
-     * id
+     * id,注解数据库自动生成
      */
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
@@ -35,7 +35,7 @@ public class Category extends BaseEntity implements Serializable {
     /**
      * 当前分类是否为根节点（一级分类）
      */
-    private Boolean isRoot;
+    private Integer isRoot;
     /**
      * 是否上线/是否显示
      */

@@ -4,9 +4,10 @@ package io.github.talelin.latticy.service.impl.my;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.talelin.autoconfigure.exception.NotFoundException;
-import io.github.talelin.latticy.bo.BannerItemsBO;
+import io.github.talelin.latticy.bo.my.BannerItemsBO;
 import io.github.talelin.latticy.common.exception.DeleteException;
 
+import io.github.talelin.latticy.common.exception.SaveException;
 import io.github.talelin.latticy.common.exception.UpdateException;
 import io.github.talelin.latticy.common.mybatis.Page;
 import io.github.talelin.latticy.dto.my.BannerDTO;
@@ -17,6 +18,7 @@ import io.github.talelin.latticy.model.my.BannerItem;
 import io.github.talelin.latticy.service.imy.IBannerService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -107,11 +109,15 @@ public class BannerServiceImpl implements IBannerService {
      * @param banner
      */
     @Override
-    public Integer saveBanner(Banner banner) {
+    public void saveBanner(Banner banner) {
         //返回 1，创建成功
-        int res = bannerMapper.insert(banner);
-        return res;
+        try{
+            bannerMapper.insert(banner);
+        }catch (DuplicateKeyException e) {
+            throw new SaveException(20004);
+        }catch (Exception e) {
+            throw new SaveException(21001);
+        }
+        return;
     }
-
-
 }

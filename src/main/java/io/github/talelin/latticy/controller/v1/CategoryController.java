@@ -1,13 +1,16 @@
 package io.github.talelin.latticy.controller.v1;
 
+import io.github.talelin.latticy.bo.my.CategoryBO;
 import io.github.talelin.latticy.common.util.CommonUtils;
 import io.github.talelin.latticy.dto.my.CategoryDTO;
+import io.github.talelin.latticy.dto.my.CategorySaveDTO;
 import io.github.talelin.latticy.model.my.Category;
 import io.github.talelin.latticy.model.my.Page;
 import io.github.talelin.latticy.service.imy.ICategoryService;
 import io.github.talelin.latticy.vo.CreatedVO;
 import io.github.talelin.latticy.vo.DeletedVO;
 import io.github.talelin.latticy.vo.UpdatedVO;
+import io.github.talelin.latticy.vo.my.CategoryDetailVO;
 import io.github.talelin.latticy.vo.my.CategoryVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,33 +36,32 @@ public class CategoryController {
     /**
      * 分页获取一级分类数据
      * @param page 当前页
-     * @param size 每页查询数量
+     * @param count 每页查询数据量
      * @return
      */
     @GetMapping("/all/oneLevel")
     public Page searchOneLevelCategories(@RequestParam(name = "page",defaultValue = "1")
                                          @Min(value = 1) Integer page,
-                                         @RequestParam(name = "size", defaultValue = "20")
-                                         @Min(value = 3) @Max(value = 30) Integer size) {
-        Map<String,Integer> pageMap = CommonUtils.convertPageParams(page,size);
-        Page categories = categoryService.searchAllOneLevelCategories(pageMap,size);
+                                         @RequestParam(name = "count", defaultValue = "10")
+                                         @Min(value = 3) @Max(value = 30) Integer count) {
+        Map<String,Integer> pageMap = CommonUtils.convertPageParams(page,count);
+        Page categories = categoryService.searchAllOneLevelCategories(pageMap,count);
         return categories;
     }
 
     /**
-     * 分页获取二级商品分类数据
+     * 根据父级分类id,分页获取二级商品分类数据
      * @param page
      * @param size
      * @param parentId
      * @return
      */
-    @GetMapping("/all/twoLevel")
+    @GetMapping("/all/twoLevel/{id}")
     public Page searchTwoLevelCategoriesByParentId(@RequestParam(name = "page",defaultValue = "1")
                                                    @Min(value = 1) Integer page,
-                                                   @RequestParam(name = "size", defaultValue = "20")
+                                                   @RequestParam(name = "size", defaultValue = "10")
                                                    @Min(value = 3) @Max(value = 30) Integer size,
-                                                   @RequestParam(name = "parentId")
-                                                   @NotNull @Positive Long parentId) {
+                                                   @PathVariable(name = "id") @NotNull @Positive Long parentId) {
         Map<String,Integer> pageMap = CommonUtils.convertPageParams(page,size);
         Page categories = categoryService.searchAllTwoLevelCategoriesByParentId(pageMap,size,parentId);
         return categories;
@@ -71,11 +73,20 @@ public class CategoryController {
      * @return
      */
     @PutMapping("/update")
-    public UpdatedVO updateCategoryInfoById(@RequestBody @NotNull CategoryDTO categoryDTO) {
-        Category category = new Category();
-        BeanUtils.copyProperties(categoryDTO,category);
-        categoryService.update(category);
+    public UpdatedVO updateCategoryInfoById(@RequestBody @Validated CategoryDTO categoryDTO) {
+        categoryService.update(categoryDTO);
         return new UpdatedVO(2);
+    }
+
+    /**
+     * 根据id，查询当前分类的明细
+     * @param id
+     * @return
+     */
+    @RequestMapping("/detail/{id}")
+    public CategoryDetailVO getCategoryDetail(@PathVariable("id") @NotNull @Positive Long id) {
+        CategoryBO bo = categoryService.getCategoryDetailById(id);
+        return new CategoryDetailVO(bo);
     }
 
     /**
@@ -91,13 +102,12 @@ public class CategoryController {
 
     /**
      * 新增分类
-     * @param categoryDTO
+     * @param categorySaveDTO
      */
     @PostMapping("/save")
-    public void save(@RequestBody @NotNull CategoryDTO categoryDTO) {
-        Category category = new Category();
-        BeanUtils.copyProperties(categoryDTO,category);
-        categoryService.save(category);
+    public CreatedVO save(@RequestBody @Validated CategorySaveDTO categorySaveDTO) {
+        categoryService.save(categorySaveDTO);
+        return new CreatedVO(1);
     }
 
     /**
@@ -107,15 +117,7 @@ public class CategoryController {
     @GetMapping("/grid")
     public List<CategoryVO> searchGrid() {
         List<Category> categories = categoryService.searchGrid();
-        List<CategoryVO> categoryVOS = new ArrayList<>();
-        if(categories == null || categories.size() <1) {
-            return categoryVOS;
-        }
-        for(Category c : categories) {
-            CategoryVO categoryVO = new CategoryVO(c);
-            categoryVOS.add(categoryVO);
-        }
-        return categoryVOS;
+        return CategoryVO.convertTypes(categories);
     }
 
     /**
@@ -138,4 +140,17 @@ public class CategoryController {
         categoryService.addCategoryToGrid(id);
         return new CreatedVO(21004);
     }
+
+    /**
+     * @Description: 根据id,获取分类名称
+     * @param id 分类id
+     * @return java.lang.String
+     * @Author: Guiquan Chen
+     * @Date: 2021/2/22
+     */
+    @RequestMapping("/name/{id}")
+    public String searchParentCategoryName(@PathVariable("id") @NotNull @Positive Long id) {
+       return categoryService.searchNameByParentId(id);
+    }
+
 }

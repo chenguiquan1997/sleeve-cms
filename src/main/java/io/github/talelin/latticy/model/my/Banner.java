@@ -21,9 +21,21 @@ public class Banner extends BaseEntity implements Serializable {
      */
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
+    /**
+     * banner 名称
+     */
     private String name;
+    /**
+     * 标题
+     */
     private String title;
+    /**
+     * 图片
+     */
     private String img;
+    /**
+     * 描述
+     */
     private String description;
 
 }

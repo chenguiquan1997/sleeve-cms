@@ -1,4 +1,4 @@
-package io.github.talelin.latticy.bo;
+package io.github.talelin.latticy.bo.my;
 
 import io.github.talelin.latticy.common.enumeration.my.BannerItemTypeEnum;
 import io.github.talelin.latticy.model.my.Banner;

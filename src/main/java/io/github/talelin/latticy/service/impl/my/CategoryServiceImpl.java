@@ -2,14 +2,18 @@ package io.github.talelin.latticy.service.impl.my;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.github.talelin.autoconfigure.exception.NotFoundException;
+import io.github.talelin.latticy.bo.my.CategoryBO;
 import io.github.talelin.latticy.common.exception.AddException;
 import io.github.talelin.latticy.common.exception.DeleteException;
 import io.github.talelin.latticy.common.exception.SaveException;
 import io.github.talelin.latticy.common.exception.UpdateException;;
+import io.github.talelin.latticy.dto.my.CategoryDTO;
+import io.github.talelin.latticy.dto.my.CategorySaveDTO;
 import io.github.talelin.latticy.mapper.my.CategoryMapper;
 import io.github.talelin.latticy.model.my.Category;
 import io.github.talelin.latticy.model.my.Page;
 import io.github.talelin.latticy.service.imy.ICategoryService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +31,13 @@ public class CategoryServiceImpl implements ICategoryService {
     @Autowired
     private CategoryMapper categoryMapper;
 
+    /**
+     * @Description: 根据分类id，查询唯一分类数据，每次进行分类数据的修改操作时，都需要先查询以下，有无当前数据
+     * @param id 分类id
+     * @return io.github.talelin.latticy.model.my.Category
+     * @Author: Guiquan Chen
+     * @Date: 2021/2/21
+     */
     public Category queryOneCategoryMock(Long id) {
         QueryWrapper<Category> c = new QueryWrapper<>();
         c.eq("id",id).isNull("delete_time");
@@ -35,8 +46,12 @@ public class CategoryServiceImpl implements ICategoryService {
     }
 
     /**
-     * 查询所有一级分类数据
-     * @return
+     * @Description: 查询所有一级分类数据
+     * @param pageMap sql语句进行分页查询时，需要的两个参数
+     * @param size 当前页数据量
+     * @return io.github.talelin.latticy.model.my.Page
+     * @Author: Guiquan Chen
+     * @Date: 2021/2/21
      */
     @Override
     public Page searchAllOneLevelCategories(Map<String,Integer> pageMap, Integer size) {
@@ -50,7 +65,7 @@ public class CategoryServiceImpl implements ICategoryService {
     }
 
     /**
-     * 分页查询二级分类数据
+     * 根据父级分类id,分页查询二级分类数据
      * @param pageMap
      * @param size
      * @param parentId 父级分类id
@@ -69,9 +84,19 @@ public class CategoryServiceImpl implements ICategoryService {
 
     /**
      * 更新分类数据
-     * @param category
+     * @param categoryDTO
      */
-    public void update(Category category) {
+    public void update(CategoryDTO categoryDTO) {
+        // 不是一级分类，但是父级分类 id 为空
+        if(categoryDTO.getIsRoot() != 1 && categoryDTO.getParentId() == null) {
+            throw new UpdateException(22004);
+        }
+        //是一级分类，但是父级分类 id 不为空
+        else if(categoryDTO.getIsRoot() == 1 && categoryDTO.getParentId() != null) {
+            throw new UpdateException(22005);
+        }
+        Category category = new Category();
+        BeanUtils.copyProperties(categoryDTO,category);
         Category category1 = this.queryOneCategoryMock(category.getId());
         if(category1 == null) {
             throw new NotFoundException(22001);
@@ -117,11 +142,20 @@ public class CategoryServiceImpl implements ICategoryService {
 
     /**
      * 新增分类
-     * @param category
+     * @param categorySaveDTO
      */
     @Override
-    public void save(Category category) {
-        //categoryMapper.insert(category);
+    public void save(CategorySaveDTO categorySaveDTO) {
+        // 不是一级分类，但是父级分类 id 为空
+        if(categorySaveDTO.getIsRoot() != 1 && categorySaveDTO.getParentId() == null) {
+            throw new SaveException(22004);
+        }
+        //是一级分类，但是父级分类 id 不为空
+        else if(categorySaveDTO.getIsRoot() == 1 && categorySaveDTO.getParentId() != null) {
+            throw new SaveException(22005);
+        }
+        Category category = new Category();
+        BeanUtils.copyProperties(categorySaveDTO,category);
         try{
             categoryMapper.insert(category);
         }catch (Exception e) {
@@ -179,6 +213,44 @@ public class CategoryServiceImpl implements ICategoryService {
         }else {
             throw new AddException(21003);
         }
+    }
+
+    /**
+     * 根据id查询当前分类详情
+     * @param id
+     * @return
+     */
+    @Override
+    public CategoryBO getCategoryDetailById(Long id) {
+        if(id == null  || id <= 0) throw new NotFoundException(22001);
+        Category category = categoryMapper.getCategoryDetailById(id);
+        if(category == null) {
+            throw new NotFoundException(22001);
+        }
+        CategoryBO categoryBO = new CategoryBO();
+        BeanUtils.copyProperties(category,categoryBO);
+        Long parentId = category.getParentId();
+        if(parentId != null) {
+            String name = categoryMapper.searchNameByParentId(parentId);
+            categoryBO.setParentName(name);
+        }else {
+            categoryBO.setParentName(new String("无"));
+        }
+        return categoryBO;
+    }
+
+    /**
+     * 根据id,获取分类名称
+     * @param parentId
+     * @return
+     */
+    @Override
+    public String searchNameByParentId(Long parentId) {
+        String nullName = new String("无");
+        if(parentId == null  || parentId <= 0) return nullName;
+        String name = categoryMapper.searchNameByParentId(parentId);
+        if(name == null) return nullName;
+        return name;
     }
 
 }

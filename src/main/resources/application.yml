@@ -45,6 +45,11 @@ lin:
     token-refresh-expire: 2592000
     # 令牌 secret
     token-secret: x88Wf0991079889x8796a0Ac68f9ecJJU17c5Vbe8beod7d8d3e695*4
+  file:
+    qiniuyun:
+      access-key: prKsiQeJs9fo7QYoHz3HLmNxI9EzLSLLDtr-Nm4V
+      secret-key: LUME7y70iQ-7uGCHs1GhKN3tUiNcZy5PnH3if6Y7
+      bucket: sleeves
 logging:
   file:
     max-history:

@@ -28,12 +28,12 @@ public interface CategoryMapper extends BaseMapper<Category> {
 
     /**
      * 根据父级分类id，查询二级分类
-     * @param page
+     * @param startCount
      * @param size
      * @param parentId
      * @return
      */
-    List<Category> searchTwoLevelByParentId(@Param("page") Integer page,
+    List<Category> searchTwoLevelByParentId(@Param("startCount") Integer startCount,
                                             @Param("size") Integer size,
                                             @Param("parentId") Long parentId);
 
@@ -72,4 +72,18 @@ public interface CategoryMapper extends BaseMapper<Category> {
      * @return 属于六宫格的分类数量
      */
     Integer searchCategoryCountFromGrid();
+
+    /**
+     * 根据id查询分类明细
+     * @param id
+     * @return
+     */
+    Category getCategoryDetailById(@Param("id") Long id);
+
+    /**
+     * 根据父级id,获取父级分类名称
+     * @param id
+     * @return
+     */
+    String searchNameByParentId(@Param("parentId") Long id);
 }
