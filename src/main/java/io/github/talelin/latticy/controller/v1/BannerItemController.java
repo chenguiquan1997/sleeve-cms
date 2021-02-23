@@ -6,6 +6,7 @@ import io.github.talelin.latticy.service.imy.IBannerItemService;
 import io.github.talelin.latticy.service.imy.IBannerItemTypeService;
 
 import io.github.talelin.latticy.vo.CreatedVO;
+import io.github.talelin.latticy.vo.DeletedVO;
 import io.github.talelin.latticy.vo.UpdatedVO;
 import io.github.talelin.latticy.vo.my.BannerItemTypeVO;
 import io.github.talelin.latticy.vo.my.BannerItemVO;
@@ -87,5 +88,18 @@ public class BannerItemController {
             return new CreatedVO(21004);
         }
         return new CreatedVO(21003);
+    }
+
+    /**
+     * @Description: 根据 id 逻辑删除指定banner-item
+     * @param id
+     * @return: DeletedVO
+     * @Author: Guiquan Chen
+     * @Date: 2021/2/23
+     */
+    @DeleteMapping("/remove/{id}")
+    public DeletedVO removeItemById(@PathVariable("id") @NotNull @Positive Long id) {
+        bannerItemService.remove(id);
+        return new DeletedVO(3);
     }
 }
