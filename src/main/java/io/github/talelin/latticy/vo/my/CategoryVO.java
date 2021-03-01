@@ -56,6 +56,10 @@ public class CategoryVO {
      * 创建时间
      */
     private Date createTime;
+    /**
+     * 当前六宫格是否上线的标记
+     */
+    private Boolean gridOnline;
 
     /**
      * @Description: 构造方法内部将category转换成categoryVO

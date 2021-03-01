@@ -56,6 +56,13 @@ public interface CategoryMapper extends BaseMapper<Category> {
     List<Category> searchGrid();
 
     /**
+     * 根据id，查询指定六宫格数据
+     * @param id
+     * @return
+     */
+    Category searchGridById(@Param("id") Long id);
+
+    /**
      * 将指定分类从六宫格中剔除掉
      * @param categoryId 商品分类id
      */
@@ -86,4 +93,10 @@ public interface CategoryMapper extends BaseMapper<Category> {
      * @return
      */
     String searchNameByParentId(@Param("parentId") Long id);
+
+    /**
+     * 根据分类 id 逻辑删除指定六宫格
+     * @param id
+     */
+    void removeGridById(@Param("id") Long id);
 }

@@ -13,6 +13,7 @@
         <result column="level" jdbcType="INTEGER" property="level"/>
         <result column="idx" jdbcType="INTEGER" property="idx"/>
         <result column="grid_img" jdbcType="VARCHAR" property="gridImg"/>
+        <result column="grid_online" jdbcType="BOOLEAN" property="gridOnline"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
         <result column="delete_time" jdbcType="TIMESTAMP" property="deleteTime"/>
@@ -71,9 +72,16 @@
 
     <!--获取六宫格数据-->
     <select id="searchGrid" resultMap="BaseResultMap">
-        select *
+        select id, `name`, online, idx, create_time, grid_img, is_grid, grid_online
         from category
         where is_grid = 1 and is_root = 1 and delete_time is null
+    </select>
+
+    <!--根据 id,获取指定六宫格数据-->
+    <select id="searchGridById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select id, `name`, grid_online, idx, create_time, grid_img, is_grid
+        from category
+        where is_grid = 1 and is_root = 1 and id = #{id} and delete_time is null
     </select>
 
     <!--将指定分类从六宫格中剔除掉-->
@@ -96,6 +104,12 @@
         from category
         where is_root = 1 and is_grid = 1 and delete_time is null
     </select>
+    <!--根据分类 id 逻辑删除指定六宫格-->
+    <update id="removeGridById">
+        update category
+        set idx = 0, is_grid = 0, grid_online = 0
+        where id = #{id} and is_root = 1
+    </update>
 
 
 </mapper>

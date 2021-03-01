@@ -1,6 +1,8 @@
 package io.github.talelin.latticy.service.impl.my;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import io.github.talelin.autoconfigure.exception.NotFoundException;
 import io.github.talelin.latticy.bo.my.CategoryBO;
 import io.github.talelin.latticy.common.exception.AddException;
@@ -9,8 +11,10 @@ import io.github.talelin.latticy.common.exception.SaveException;
 import io.github.talelin.latticy.common.exception.UpdateException;;
 import io.github.talelin.latticy.dto.my.CategoryDTO;
 import io.github.talelin.latticy.dto.my.CategorySaveDTO;
+import io.github.talelin.latticy.dto.my.GridUpdateDTO;
 import io.github.talelin.latticy.mapper.my.CategoryMapper;
 import io.github.talelin.latticy.model.my.Category;
+import io.github.talelin.latticy.model.my.Grid;
 import io.github.talelin.latticy.model.my.Page;
 import io.github.talelin.latticy.service.imy.ICategoryService;
 import org.springframework.beans.BeanUtils;
@@ -173,6 +177,15 @@ public class CategoryServiceImpl implements ICategoryService {
         return categories;
     }
 
+    @Override
+    public Grid searchGridById(Long id) {
+        if(id == null || id <= 0) throw new NotFoundException(22006);
+        Category category = categoryMapper.searchGridById(id);
+        Grid grid = new Grid();
+        BeanUtils.copyProperties(category,grid);
+        return grid;
+    }
+
     /**
      * 从六宫格中删除指定商品分类
      * @param id 商品分类id
@@ -251,6 +264,45 @@ public class CategoryServiceImpl implements ICategoryService {
         String name = categoryMapper.searchNameByParentId(parentId);
         if(name == null) return nullName;
         return name;
+    }
+
+    /**
+     * @Description: 根据 id 更新六宫格数据
+     * @param gridUpdateDTO
+     * @return:
+     * @Author: Guiquan Chen
+     * @Date: 2021/2/28
+     */
+    @Override
+    public void updateGridById(GridUpdateDTO gridUpdateDTO) {
+        Category category = new Category();
+        BeanUtils.copyProperties(gridUpdateDTO,category);
+        UpdateWrapper<Category> wrapper = new UpdateWrapper<>();
+        wrapper.eq("id",category.getId());
+        wrapper.set("grid_online",category.getGridOnline())
+                                           .set("grid_img",category.getGridImg());
+        try {
+            categoryMapper.update(category,wrapper);
+        }catch (Exception e) {
+            throw new UpdateException(21000);
+        }
+
+    }
+
+    /**
+     * @Description: 根据分类 id 删除指定六宫格数据
+     * @param id 分类id
+     * @return:
+     * @Author: Guiquan Chen
+     * @Date: 2021/3/1
+     */
+    @Override
+    public void removeGridById(Long id) {
+        try {
+            categoryMapper.removeGridById(id);
+        }catch (Exception e) {
+            throw new DeleteException(21002);
+        }
     }
 
 }

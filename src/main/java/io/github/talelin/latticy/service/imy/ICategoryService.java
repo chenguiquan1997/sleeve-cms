@@ -3,7 +3,9 @@ package io.github.talelin.latticy.service.imy;
 import io.github.talelin.latticy.bo.my.CategoryBO;
 import io.github.talelin.latticy.dto.my.CategoryDTO;
 import io.github.talelin.latticy.dto.my.CategorySaveDTO;
+import io.github.talelin.latticy.dto.my.GridUpdateDTO;
 import io.github.talelin.latticy.model.my.Category;
+import io.github.talelin.latticy.model.my.Grid;
 import io.github.talelin.latticy.model.my.Page;
 import org.apache.ibatis.annotations.Param;
 
@@ -25,6 +27,13 @@ public interface ICategoryService {
 
     List<Category> searchGrid();
 
+    /**
+     * 根据id，查询指定六宫格数据
+     * @param id
+     * @return
+     */
+    Grid searchGridById(Long id);
+
     void removeCategoryFromGrid(Long id);
 
     void addCategoryToGrid(Long id);
@@ -42,4 +51,8 @@ public interface ICategoryService {
      * @return
      */
     String searchNameByParentId(Long id);
+
+    void updateGridById(GridUpdateDTO gridUpdateDTO);
+
+    void removeGridById(Long id);
 }

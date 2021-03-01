@@ -64,4 +64,8 @@ public class Category extends BaseEntity implements Serializable {
      * 是否属于六宫格中的分类
      */
     private Boolean isGrid;
+    /**
+     * 当前六宫格是否上线的标记
+     */
+    private Boolean gridOnline;
 }
