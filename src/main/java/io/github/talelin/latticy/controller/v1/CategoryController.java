@@ -42,6 +42,7 @@ public class CategoryController {
      * @return io.github.talelin.latticy.model.my.Page
      * @Author: Guiquan Chen
      * @Date: 2021/1/25
+     * @return
      */
     @GetMapping("/all/oneLevel")
     public Page searchOneLevelCategories(@RequestParam(name = "page",defaultValue = "1")
@@ -95,13 +96,13 @@ public class CategoryController {
      */
     @RequestMapping("/detail/{id}")
     public CategoryDetailVO getCategoryDetail(@PathVariable("id") @NotNull @Positive Long id) {
-
         CategoryBO bo = categoryService.getCategoryDetailById(id);
         return new CategoryDetailVO(bo);
     }
 
     /**
      * @Description: 根据分类id，逻辑删除指定的商品分类；有子分类的，进行级联删除
+     * 根据分类id，逻辑删除指定的商品分类；有子分类的，进行级联删除
      * @param id
      * @return io.github.talelin.latticy.vo.DeletedVO
      * @Author: Guiquan Chen
@@ -136,6 +137,17 @@ public class CategoryController {
     public List<CategoryVO> searchGrid() {
         List<Category> categories = categoryService.searchGrid();
         return CategoryVO.convertTypes(categories);
+    }
+
+    /**
+     * 从六宫格中删除指定商品分类
+     * @param id 商品分类id
+     * @return
+     */
+    @DeleteMapping("/grid/remove/{id}")
+    public DeletedVO removeFromGrid(@PathVariable(name = "id") @NotNull @Positive Long id) {
+        categoryService.removeCategoryFromGrid(id);
+        return new DeletedVO(3);
     }
 
     /**
@@ -200,5 +212,4 @@ public class CategoryController {
        categoryService.removeGridById(id);
        return new DeletedVO(3);
     }
-
 }
