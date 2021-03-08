@@ -6,6 +6,8 @@ import io.github.talelin.latticy.model.my.SpecValue;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface SpecValueMapper extends BaseMapper<SpecValue> {
 
@@ -14,4 +16,10 @@ public interface SpecValueMapper extends BaseMapper<SpecValue> {
      * @param keyId
      */
     IPage<SpecValue> searchAllSpecValueByKey(IPage<SpecValue> page, @Param("keyId") Long keyId);
+
+    /**
+     * 查询规格值名称列表
+     * @return
+     */
+    List<SpecValue> searchNameList();
 }

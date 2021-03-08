@@ -23,4 +23,8 @@ public class SpecValue extends BaseEntity implements Serializable {
      * 规格名id
      */
     private Long keyId;
+    /**
+     * 扩展说明
+     */
+    private String extend;
 }

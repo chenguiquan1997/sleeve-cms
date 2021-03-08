@@ -1,6 +1,8 @@
 package io.github.talelin.latticy.service.imy;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.github.talelin.latticy.dto.my.SpecValueDTO;
+import io.github.talelin.latticy.dto.my.SpecValueUpdateDTO;
 import io.github.talelin.latticy.model.my.SpecValue;
 
 public interface ISpecValueService {
@@ -15,7 +17,20 @@ public interface ISpecValueService {
 
     /**
      * 新增商品规格值
-     * @param specValue
+     * @param specValueDto
      */
-    void save(SpecValue specValue);
+    void save(SpecValueDTO specValueDto);
+
+    /**
+     * 更新规格值
+     * @param specValueUpdateDTO
+     */
+    void update(SpecValueUpdateDTO specValueUpdateDTO);
+
+    /**
+     * 根据id，查询规格值
+     * @param id
+     * @return
+     */
+    SpecValue getValueById(Long id);
 }

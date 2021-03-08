@@ -1,6 +1,8 @@
 package io.github.talelin.latticy.service.imy;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.github.talelin.latticy.dto.my.SpecKeyDTO;
+import io.github.talelin.latticy.dto.my.SpecKeyUpdateDTO;
 import io.github.talelin.latticy.model.my.SpecKey;
 
 public interface ISpecKeyService {
@@ -15,7 +17,20 @@ public interface ISpecKeyService {
 
     /**
      * 新增商品规格名
-     * @param specKey
+     * @param specKeyDTO
      */
-    void save(SpecKey specKey);
+    void save(SpecKeyDTO specKeyDTO);
+
+    /**
+     * 根据id查询规格名
+     * @param id
+     * @return
+     */
+    SpecKey searchOneById(Long id);
+
+    /**
+     * 更新规格名
+     * @param specKeyUpdateDTO
+     */
+    void update(SpecKeyUpdateDTO  specKeyUpdateDTO);
 }
