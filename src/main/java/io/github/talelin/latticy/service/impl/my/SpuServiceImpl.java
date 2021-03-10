@@ -10,6 +10,8 @@ import io.github.talelin.latticy.service.imy.ISpuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -39,10 +41,24 @@ public class SpuServiceImpl implements ISpuService {
     @Override
     public SpuDetailBO searchSpuDetailById(Long spuId) {
         SpuDetail spuDetail = spuMapper.searchSpuDetailById(spuId);
+        List<String> tagList = this.splitTags(spuDetail.getTags());
         List<Map<Object,Object>> specList = spuMapper.searchSpecBySpuId(spuId);
         SpuDetailBO spuDetailBO = new SpuDetailBO();
-        spuDetailBO.convert(spuDetail,specList);
+        spuDetailBO.convert(spuDetail,specList,tagList);
         return spuDetailBO;
+    }
+    /**
+     * @Description: 拆分SPU的标签
+     * @param tags
+     * @return java.util.List<java.lang.String>
+     * @Author: Guiquan Chen
+     * @Date: 2021/3/10
+     */
+    private List<String> splitTags(String tags) {
+       List<String> tagList = new ArrayList<>();
+       if(tags.isEmpty()) return tagList;
+       String[] tagArr = tags.split("\\$");
+       return Arrays.asList(tagArr);
     }
 
     @Override

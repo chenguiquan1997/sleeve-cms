@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -52,4 +53,12 @@ public class SpuOutlineVO<T> {
      * 当前商品所属分类名
      */
     private String categoryName;
+    /**
+     * spu图片
+     */
+    private String img;
+    /**
+     * 创建时间
+     */
+    private Date createTime;
 }

@@ -154,12 +154,19 @@ public class SpecController {
      */
     @DeleteMapping("/key/delete/{id}")
     public DeletedVO deleteSpecKey(@PathVariable("id") @NotNull @Positive Long id) {
-
+        specKeyService.delete(id);
+        return new DeletedVO(3);
     }
-
+    /**
+     * @Description: 删除指定规格值
+     * @param id 规格值id
+     * @Author: Guiquan Chen
+     * @Date: 2021/3/9
+     */
     @DeleteMapping("/value/delete/{id}")
     public DeletedVO deleteSpecValue(@PathVariable("id") @NotNull @Positive Long id) {
-
+        specValueService.delete(id);
+        return new DeletedVO(3);
     }
 
 

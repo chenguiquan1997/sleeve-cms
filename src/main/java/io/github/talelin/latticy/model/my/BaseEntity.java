@@ -1,13 +1,10 @@
 package io.github.talelin.latticy.model.my;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.Setter;
-
+import lombok.*;
 import java.util.Date;
 
-@Setter
-@Getter
+@Data
 public class BaseEntity {
 
     private Date createTime;

@@ -33,4 +33,10 @@ public interface ISpecKeyService {
      * @param specKeyUpdateDTO
      */
     void update(SpecKeyUpdateDTO  specKeyUpdateDTO);
+
+    /**
+     * 删除指定规格
+     * @param id
+     */
+    void delete(Long id);
 }

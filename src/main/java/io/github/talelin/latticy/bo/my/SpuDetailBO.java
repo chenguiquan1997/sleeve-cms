@@ -22,10 +22,15 @@ public class SpuDetailBO extends SpuDetail {
      * spu所拥有的规格
      */
     List<Map<Object,Object>> spuSpecs;
+    /**
+     * spu所拥有的标签集合
+     */
+    List<String> tagList;
 
-    public void convert(SpuDetail spuDetail, List<Map<Object,Object>> spuSpecs) {
+    public void convert(SpuDetail spuDetail, List<Map<Object,Object>> spuSpecs, List<String> tagList) {
         BeanUtils.copyProperties(spuDetail,this);
         this.spuSpecs = spuSpecs;
+        this.tagList = tagList;
     }
 
 }

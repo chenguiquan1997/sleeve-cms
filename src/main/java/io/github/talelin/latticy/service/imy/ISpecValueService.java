@@ -33,4 +33,10 @@ public interface ISpecValueService {
      * @return
      */
     SpecValue getValueById(Long id);
+
+    /**
+     * 根据id，删除规格值
+     * @param id
+     */
+    void delete(Long id);
 }

@@ -1,18 +1,23 @@
 package io.github.talelin.latticy.service.impl.my;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.talelin.autoconfigure.exception.NotFoundException;
+import io.github.talelin.latticy.common.exception.DeleteException;
 import io.github.talelin.latticy.common.exception.SaveException;
 import io.github.talelin.latticy.common.exception.UpdateException;
 import io.github.talelin.latticy.dto.my.SpecKeyDTO;
 import io.github.talelin.latticy.dto.my.SpecKeyUpdateDTO;
 import io.github.talelin.latticy.mapper.my.SpecKeyMapper;
 import io.github.talelin.latticy.model.my.SpecKey;
+import io.github.talelin.latticy.model.my.SpecValue;
 import io.github.talelin.latticy.service.imy.ISpecKeyService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -78,7 +83,9 @@ public class SpecKeyServiceImpl implements ISpecKeyService {
      */
     @Override
     public SpecKey searchOneById(Long id) {
-        SpecKey specKey = specKeyMapper.selectById(id);
+        QueryWrapper<SpecKey> wrapper = new QueryWrapper<>();
+        wrapper.eq("id",id).isNull("delete_time");
+        SpecKey specKey = specKeyMapper.selectOne(wrapper);
         if(specKey == null) {
             throw new NotFoundException(23001);
         }
@@ -102,5 +109,23 @@ public class SpecKeyServiceImpl implements ISpecKeyService {
         }catch (Exception e) {
             throw new UpdateException(21000);
         }
+    }
+
+    /**
+     * 根据id，删除指定规格
+     * @param id 规格id
+     */
+    @Override
+    public void delete(Long id) {
+        this.searchOneById(id);
+        SpecKey specKey = new SpecKey();
+        specKey.setId(id);
+        specKey.setDeleteTime(new Date());
+        try {
+            specKeyMapper.updateById(specKey);
+        }catch (Exception  e) {
+            throw new DeleteException(21002);
+        }
+
     }
 }

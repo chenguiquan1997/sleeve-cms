@@ -5,13 +5,14 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.talelin.latticy.model.my.SpuDetail;
 import io.github.talelin.latticy.model.my.SpuOutline;
 import org.apache.ibatis.annotations.Param;
+import io.github.talelin.latticy.model.my.Spu;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
 
 @Repository
-public interface SpuMapper {
+public interface SpuMapper extends BaseMapper<Spu> {
 
     /**
      * 分页查询Spu概要信息

@@ -3,6 +3,7 @@ package io.github.talelin.latticy.service.impl.my;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.github.talelin.latticy.common.exception.DeleteException;
 import io.github.talelin.latticy.common.exception.SaveException;
 import io.github.talelin.autoconfigure.exception.NotFoundException;
 import io.github.talelin.latticy.common.exception.UpdateException;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -30,9 +32,11 @@ public class SpecValueServiceImpl implements ISpecValueService {
      * @return
      */
     public Boolean searchSpecValueMock(Long id) {
-      SpecValue specValue = specValueMapper.selectById(id);
-      if(specValue == null) return false;
-      return true;
+        Wrapper<SpecValue> wrapper = new QueryWrapper<>();
+        ((QueryWrapper<SpecValue>) wrapper).eq("id",id).isNull("delete_time");
+        SpecValue specValue = specValueMapper.selectOne(wrapper);
+        if(specValue == null) return false;
+        return true;
     }
 
     /**
@@ -143,6 +147,11 @@ public class SpecValueServiceImpl implements ISpecValueService {
         }
     }
 
+    /**
+     * 获取指定规格值
+     * @param id 规格值id
+     * @return
+     */
     @Override
     public SpecValue getValueById(Long id) {
         SpecValue specValue = specValueMapper.selectById(id);
@@ -150,5 +159,25 @@ public class SpecValueServiceImpl implements ISpecValueService {
             throw new NotFoundException(23002);
         }
         return specValue;
+    }
+
+    /**
+     * 删除指定规格值
+     * @param id 规格值id
+     */
+    @Override
+    public void delete(Long id) {
+        boolean flag = this.searchSpecValueMock(id);
+        if(!flag) {
+            throw new NotFoundException(23002);
+        }
+        SpecValue specValue = new SpecValue().builder().id(id).build();
+        specValue.setDeleteTime(new Date());
+        try{
+            specValueMapper.updateById(specValue);
+        }catch (Exception e) {
+           throw new DeleteException(21002);
+        }
+
     }
 }
