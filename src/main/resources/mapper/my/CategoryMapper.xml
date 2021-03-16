@@ -19,6 +19,24 @@
         <result column="delete_time" jdbcType="TIMESTAMP" property="deleteTime"/>
     </resultMap>
 
+    <!--&lt;!&ndash;分类及所属子分类的Map&ndash;&gt;-->
+    <!--<resultMap id="categoryResultMap" type="io.github.talelin.latticy.bo.my.CategoryNameBO">-->
+        <!--<result column="root_category" property="rootCategory"></result>-->
+        <!--<collection property="childrenCategory" ofType="java.lang.String">-->
+            <!--<constructor>-->
+                <!--<arg column="directly_category"></arg>-->
+            <!--</constructor>-->
+        <!--</collection>-->
+    <!--</resultMap>-->
+
+    <!--&lt;!&ndash;查询分类以及所属子分类,自连接查询&ndash;&gt;-->
+    <!--<select id="searchCategoryAndChildren" resultMap="categoryResultMap">-->
+        <!--select c.name as root_category, cc.name as directly_category-->
+        <!--from category c-->
+        <!--left join category cc on c.id = cc.parent_id-->
+        <!--where c.id = #{rootCategoryId}-->
+    <!--</select>-->
+
     <!-- 分页查询一级分类-->
     <select id="searchAllOneLevelCategories" resultMap="BaseResultMap">
       select id, `name`, description, online, is_root, img, `level`,create_time

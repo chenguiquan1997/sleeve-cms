@@ -7,13 +7,16 @@ import io.github.talelin.latticy.common.util.PageUtil;
 import io.github.talelin.latticy.model.my.SpuOutline;
 import io.github.talelin.latticy.service.imy.ISpuService;
 import io.github.talelin.latticy.vo.PageResponseVO;
+import io.github.talelin.latticy.vo.my.SpuOwnSkusVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.util.List;
 
 @RestController
 @Validated
@@ -48,5 +51,17 @@ public class SpuController {
     public SpuDetailBO searchSpuDetail(@PathVariable(name = "id") @Positive Long id) {
         SpuDetailBO spuDetailBO = spuService.searchSpuDetailById(id);
         return spuDetailBO;
+    }
+
+    /**
+     * @Description: 获取当前 spu 所拥有的 sku 列表
+     * @param id spu id
+     * @return java.util.List<io.github.talelin.latticy.vo.my.SpuOwnSkusVO>
+     * @Author: Guiquan Chen
+     * @Date: 2021/3/16
+     */
+    @GetMapping("/own/sku/{id}")
+    public List<SpuOwnSkusVO> searchSkuBySpuId(@PathVariable("id") @NotNull @Positive Long id) {
+      return null;
     }
 }

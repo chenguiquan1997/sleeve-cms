@@ -27,6 +27,13 @@ public interface SpuMapper extends BaseMapper<Spu> {
     SpuDetail searchSpuDetailById(@Param("spuId") Long spuId);
 
     /**
+     * 查询当前SPU所属分类,从根分类，一直到直属分类
+     * @param categoryId
+     * @return
+     */
+    Map<String,String> searchCurrSpuBelongCategory(@Param("categoryId") Long categoryId);
+
+    /**
      * 根据spuId 查询当前spu所拥有的商品规格
      * @param spuId
      * @return

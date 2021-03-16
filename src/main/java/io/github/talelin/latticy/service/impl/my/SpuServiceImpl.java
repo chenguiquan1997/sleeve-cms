@@ -40,13 +40,37 @@ public class SpuServiceImpl implements ISpuService {
      */
     @Override
     public SpuDetailBO searchSpuDetailById(Long spuId) {
+        // 可以查询出SPU的基本信息和轮播图信息
         SpuDetail spuDetail = spuMapper.searchSpuDetailById(spuId);
+        // 需要查询当前SPU所属分类信息,从根分类一直到直属分类
+        StringBuffer buffer = this.mergeSpuCategorys(spuDetail.getCategoryId().longValue());
+        spuDetail.setCategoryName(buffer.toString());
+        // 拆分tag标签
         List<String> tagList = this.splitTags(spuDetail.getTags());
+        // 获取当前SPU所拥有的规格
         List<Map<Object,Object>> specList = spuMapper.searchSpecBySpuId(spuId);
         SpuDetailBO spuDetailBO = new SpuDetailBO();
         spuDetailBO.convert(spuDetail,specList,tagList);
         return spuDetailBO;
     }
+
+    /**
+     * @Description: 查询当前SPU所属分类,从根分类，一直到直属分类
+     * @param categoryId 分类id
+     * @return java.lang.StringBuffer
+     * @Author: Guiquan Chen
+     * @Date: 2021/3/14
+     */
+    private StringBuffer mergeSpuCategorys(Long categoryId) {
+        StringBuffer buffer = new StringBuffer("");
+        if(categoryId == null || categoryId < 1) return buffer;
+        Map<String,String> map = spuMapper.searchCurrSpuBelongCategory(categoryId);
+        buffer.append(map.get("root_category"));
+        buffer.append(" > ");
+        buffer.append(map.get("directly_category"));
+        return buffer;
+    }
+
     /**
      * @Description: 拆分SPU的标签
      * @param tags

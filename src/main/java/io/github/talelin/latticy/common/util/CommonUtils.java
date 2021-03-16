@@ -58,19 +58,5 @@ public class CommonUtils {
         return newItems;
     }
 
-    /**
-     * 将sku 转换成SkuVO
-     * @param items
-     * @return
-     */
-    public static List convertToSkuOutLineVO(List<Map<Long,String>> items) {
-        List newItems = new ArrayList<>();
-        if(items == null || items.size() < 1) return newItems;
-        items.forEach(item -> {
-            SkuOutlineVO vo = new SkuOutlineVO();
-            String title = item.get("title");
-            newItems.add(title);
-        });
-        return newItems;
-    }
+
 }

@@ -1,5 +1,6 @@
 package io.github.talelin.latticy.service.imy;
 
+import io.github.talelin.latticy.model.my.Sku;
 import java.util.List;
 import java.util.Map;
 
@@ -10,5 +11,6 @@ public interface ISkuService {
      * @param spuId
      * @return
      */
-    List<Map<Long,String>> searchSkuListBySpuId(Long spuId);
+    List<Sku> searchSkuListBySpuId(Long spuId);
+
 }

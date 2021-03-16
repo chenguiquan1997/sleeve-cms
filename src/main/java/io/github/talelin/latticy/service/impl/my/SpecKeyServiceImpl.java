@@ -128,4 +128,29 @@ public class SpecKeyServiceImpl implements ISpecKeyService {
         }
 
     }
+
+    /**
+     * 获取简要规格信息
+     * @return
+     */
+    @Override
+    public List<SpecKey> getSpecSummary() {
+        QueryWrapper<SpecKey> wrapper = new QueryWrapper<>();
+        wrapper.isNull("delete_time");
+        List<SpecKey> specKeys = specKeyMapper.selectList(wrapper);
+        return specKeys;
+    }
+
+    /**
+     * 根据一组id，获取简要规格信息
+     * @param ids
+     * @return
+     */
+    @Override
+    public List<SpecKey> getSpecSummaryByIds(String ids) {
+        QueryWrapper<SpecKey> wrapper = new QueryWrapper<>();
+        wrapper.inSql("id",ids).isNull("delete_time");
+        List<SpecKey> specKeys = specKeyMapper.selectList(wrapper);
+        return specKeys;
+    }
 }

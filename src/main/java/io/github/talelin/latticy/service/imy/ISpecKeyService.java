@@ -5,6 +5,8 @@ import io.github.talelin.latticy.dto.my.SpecKeyDTO;
 import io.github.talelin.latticy.dto.my.SpecKeyUpdateDTO;
 import io.github.talelin.latticy.model.my.SpecKey;
 
+import java.util.List;
+
 public interface ISpecKeyService {
 
     /**
@@ -39,4 +41,17 @@ public interface ISpecKeyService {
      * @param id
      */
     void delete(Long id);
+
+    /**
+     * 获取简要规格信息
+     * @return
+     */
+    List<SpecKey> getSpecSummary();
+
+    /**
+     * 根据一组id，获取简要规格信息
+     * @param ids
+     * @return
+     */
+    List<SpecKey> getSpecSummaryByIds(String ids);
 }

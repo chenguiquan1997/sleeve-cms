@@ -15,16 +15,16 @@ import io.github.talelin.latticy.vo.DeletedVO;
 import io.github.talelin.latticy.vo.PageResponseVO;
 import io.github.talelin.latticy.vo.UpdatedVO;
 import io.github.talelin.latticy.vo.my.SpecKeyVO;
+import io.github.talelin.latticy.vo.my.SpecSketchVO;
+import io.github.talelin.latticy.vo.my.SpecSummaryVO;
 import io.github.talelin.latticy.vo.my.SpecValueVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.*;
+import java.util.List;
 
 @RequestMapping("/v1/spec")
 @RestController
@@ -100,7 +100,7 @@ public class SpecController {
      * @Author: Guiquan Chen
      * @Date: 2021/3/3
      */
-    @RequestMapping("/key/{id}")
+    @GetMapping("/key/{id}")
     public SpecKeyVO getSpecById(@PathVariable("id") @NotNull @Positive Long id) {
         SpecKey specKey = specKeyService.searchOneById(id);
         return new SpecKeyVO(specKey);
@@ -113,7 +113,7 @@ public class SpecController {
      * @Author: Guiquan Chen
      * @Date: 2021/3/8
      */
-    @RequestMapping("/value/{id}")
+    @GetMapping("/value/{id}")
     public SpecValueVO getValueById(@PathVariable("id") @NotNull @Positive Long id) {
         SpecValue specValue = specValueService.getValueById(id);
         return new SpecValueVO(specValue);
@@ -169,5 +169,29 @@ public class SpecController {
         return new DeletedVO(3);
     }
 
+    /**
+     * @Description: 获取规格概要数据
+     * @return java.util.List<io.github.talelin.latticy.vo.my.SpecSummaryVO>
+     * @Author: Guiquan Chen
+     * @Date: 2021/3/16
+     */
+    @GetMapping("/key/summary")
+    public List<SpecSummaryVO> getSpecsSummary() {
+        List<SpecKey> specKeys = specKeyService.getSpecSummary();
+        return SpecSummaryVO.convert(specKeys);
+    }
+
+    /**
+     * @Description: 根据规格id列表，获取相应的规格
+     * @param ids 规格id的拼接字符串
+     * @return java.util.List<io.github.talelin.latticy.vo.my.SpecSummaryVO>
+     * @Author: Guiquan Chen
+     * @Date: 2021/3/16
+     */
+    @GetMapping("/key/sketch/ids")
+    public List<SpecSketchVO> geteSpecsSummaryByIds(@RequestParam(name = "ids") @NotEmpty @NotNull String ids) {
+        List<SpecKey> specKeys = specKeyService.getSpecSummaryByIds(ids);
+        return SpecSketchVO.convert(specKeys);
+    }
 
 }
