@@ -2,6 +2,7 @@ package io.github.talelin.latticy.mapper.my;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import io.github.talelin.latticy.model.my.Category;
+import io.github.talelin.latticy.bo.my.CategoryNameBO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -99,4 +100,11 @@ public interface CategoryMapper extends BaseMapper<Category> {
      * @param id
      */
     void removeGridById(@Param("id") Long id);
+
+    /**
+     * 查询分类以及所属子分类
+     * @param id 一级分类id
+     * @return CategoryNameBO
+     */
+    CategoryNameBO searchCategoryAndChildren(@Param("rootCategoryId") Long id);
 }

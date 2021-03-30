@@ -2,7 +2,10 @@ package io.github.talelin.latticy.service.imy;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.talelin.latticy.bo.my.SpuDetailBO;
+import io.github.talelin.latticy.dto.my.SpuSaveDTO;
+import io.github.talelin.latticy.dto.my.SpuUpdateDTO;
 import io.github.talelin.latticy.model.my.SpuOutline;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -29,4 +32,22 @@ public interface ISpuService {
      * @return
      */
     List<Map<Object,Object>> searchSpecBySpuId(Long spuId);
+
+    /**
+     * 更新 spu
+     * @param spuUpdateDTO
+     */
+    void update(SpuUpdateDTO spuUpdateDTO);
+
+    /**
+     * 保存 spu
+     * @param spuSaveDTO
+     */
+    void save(SpuSaveDTO spuSaveDTO);
+
+    /**
+     * 逻辑删除 spu
+     * @param id
+     */
+    void removeSpuById(Long id);
 }

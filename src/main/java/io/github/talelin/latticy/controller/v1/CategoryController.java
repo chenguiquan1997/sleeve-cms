@@ -1,6 +1,7 @@
 package io.github.talelin.latticy.controller.v1;
 
 import io.github.talelin.latticy.bo.my.CategoryBO;
+import io.github.talelin.latticy.bo.my.CategoryNameBO;
 import io.github.talelin.latticy.common.util.CommonUtils;
 import io.github.talelin.latticy.dto.my.CategoryDTO;
 import io.github.talelin.latticy.dto.my.CategorySaveDTO;
@@ -94,7 +95,7 @@ public class CategoryController {
      * @Author: Guiquan Chen
      * @Date: 2021/1/28
      */
-    @RequestMapping("/detail/{id}")
+    @GetMapping("/detail/{id}")
     public CategoryDetailVO getCategoryDetail(@PathVariable("id") @NotNull @Positive Long id) {
         CategoryBO bo = categoryService.getCategoryDetailById(id);
         return new CategoryDetailVO(bo);
@@ -170,7 +171,7 @@ public class CategoryController {
      * @Author: Guiquan Chen
      * @Date: 2021/2/24
      */
-    @RequestMapping("/grid/{id}")
+    @GetMapping("/grid/{id}")
     public Grid getGridById(@PathVariable("id") @Positive @NotNull Long id) {
         return categoryService.searchGridById(id);
     }
@@ -182,7 +183,7 @@ public class CategoryController {
      * @Author: Guiquan Chen
      * @Date: 2021/2/22
      */
-    @RequestMapping("/name/{id}")
+    @GetMapping("/name/{id}")
     public String searchParentCategoryName(@PathVariable("id") @NotNull @Positive Long id) {
        return categoryService.searchNameByParentId(id);
     }
@@ -211,5 +212,17 @@ public class CategoryController {
     public DeletedVO removeGridById(@PathVariable("id") @NotNull @Positive Long id) {
        categoryService.removeGridById(id);
        return new DeletedVO(3);
+    }
+
+    /**
+     * @Description: 查询分类以及所属子分类
+     * @return java.util.List<io.github.talelin.latticy.bo.my.CategoryNameBO>
+     * @Author: Guiquan Chen
+     * @Date: 2021/3/15
+     */
+    @GetMapping("/children")
+    public List<CategoryNameBO> getCategoryAndChildren() {
+        List<CategoryNameBO> categoryNameBOs = categoryService.searchCategoryAndChildren();
+        return categoryNameBOs;
     }
 }

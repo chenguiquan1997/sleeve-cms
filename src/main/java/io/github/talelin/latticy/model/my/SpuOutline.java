@@ -1,6 +1,7 @@
 package io.github.talelin.latticy.model.my;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

@@ -14,6 +14,7 @@ import io.github.talelin.latticy.dto.my.CategorySaveDTO;
 import io.github.talelin.latticy.dto.my.GridUpdateDTO;
 import io.github.talelin.latticy.mapper.my.CategoryMapper;
 import io.github.talelin.latticy.model.my.Category;
+import io.github.talelin.latticy.bo.my.CategoryNameBO;
 import io.github.talelin.latticy.model.my.Grid;
 import io.github.talelin.latticy.model.my.Page;
 import io.github.talelin.latticy.service.imy.ICategoryService;
@@ -22,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -212,7 +214,6 @@ public class CategoryServiceImpl implements ICategoryService {
         QueryWrapper<Category> c = new QueryWrapper<>();
         c.eq("id",id).eq("is_root",1).isNull("delete_time");
         Category category = categoryMapper.selectOne(c);
-
         if(category == null) {
             throw new NotFoundException(22003);
         }
@@ -259,7 +260,7 @@ public class CategoryServiceImpl implements ICategoryService {
      */
     @Override
     public String searchNameByParentId(Long parentId) {
-        String nullName = new String("无");
+        String nullName = "无";
         if(parentId == null  || parentId <= 0) return nullName;
         String name = categoryMapper.searchNameByParentId(parentId);
         if(name == null) return nullName;
@@ -303,5 +304,43 @@ public class CategoryServiceImpl implements ICategoryService {
         }catch (Exception e) {
             throw new DeleteException(21002);
         }
+    }
+
+    /**
+     * @Description: 查询分类以及所属子分类
+     * @return io.github.talelin.latticy.bo.my.CategoryNameBO
+     * @Author: Guiquan Chen
+     * @Date: 2021/3/15
+     */
+    @Override
+    public List<CategoryNameBO> searchCategoryAndChildren() {
+        // 获取所有一级分类
+        QueryWrapper<Category> categoryWrapper1 = new QueryWrapper<>();
+        categoryWrapper1.eq("is_root",1).isNull("delete_time");
+        List<Category> categoryList = categoryMapper.selectList(categoryWrapper1);
+        List<CategoryNameBO> categoryNameBOList = new ArrayList<>();
+        // 循环执行内部
+        if(categoryList == null || categoryList.size() < 1) return categoryNameBOList;
+        categoryList.forEach(category -> {
+            CategoryNameBO categoryName = new CategoryNameBO();
+            categoryName.setValue(category.getId());
+            categoryName.setLabel(category.getName());
+            QueryWrapper<Category> categoryWrapper = new QueryWrapper<>();
+            categoryWrapper.eq("parent_id",category.getId()).isNull("delete_time");
+            List<Category> categories = categoryMapper.selectList(categoryWrapper);
+            List<CategoryNameBO> categoryNameBOS = new ArrayList<>();
+            if(categories != null && categories.size() > 0) {
+                categories.forEach(category1 -> {
+                    CategoryNameBO categoryNameBO = CategoryNameBO.builder()
+                            .value(category1.getId())
+                            .label(category1.getName()).build();
+                    categoryNameBOS.add(categoryNameBO);
+                });
+                categoryName.setChildren(categoryNameBOS);
+            }
+            categoryNameBOList.add(categoryName);
+        });
+
+        return categoryNameBOList;
     }
 }

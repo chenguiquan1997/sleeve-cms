@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.talelin.latticy.mapper.my.SpuKeyMapper">
+    <resultMap id="BaseResultMap" type="io.github.talelin.latticy.model.my.SpuKey">
+
+    </resultMap>
+
+    <!--循环插入spu-规格的关联关系-->
+    <insert id="addSpuKey" parameterType="java.util.List">
+        insert into spu_key(spu_id, spec_key_id)
+        values
+        <foreach collection="spuKeys" item="spuKey" index="index" separator=",">
+            (#{spuKey.spuId}, #{spuKey.specKeyId})
+        </foreach>
+    </insert>
+
+    <!--删除指定spu-规格的关联关系-->
+    <delete id="removeSpuKeyBySpuId" parameterType="java.lang.Long">
+        delete from spu_key where spu_id = #{spuId}
+    </delete>
+
+</mapper>

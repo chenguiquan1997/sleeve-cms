@@ -5,9 +5,9 @@ import io.github.talelin.latticy.dto.my.CategoryDTO;
 import io.github.talelin.latticy.dto.my.CategorySaveDTO;
 import io.github.talelin.latticy.dto.my.GridUpdateDTO;
 import io.github.talelin.latticy.model.my.Category;
+import io.github.talelin.latticy.bo.my.CategoryNameBO;
 import io.github.talelin.latticy.model.my.Grid;
 import io.github.talelin.latticy.model.my.Page;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -55,4 +55,10 @@ public interface ICategoryService {
     void updateGridById(GridUpdateDTO gridUpdateDTO);
 
     void removeGridById(Long id);
+
+    /**
+     * 查询分类以及所属子分类
+     * @return List<CategoryNameBO>
+     */
+    List<CategoryNameBO> searchCategoryAndChildren();
 }

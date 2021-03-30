@@ -24,7 +24,7 @@ public class SpuDetail extends Spu implements Serializable {
     /**
      * spu 轮播图集合
      */
-    private List<String> forThemeImgs;
+    private List<String> rotationImgs;
     /**
      * spu 详情图集合
      */

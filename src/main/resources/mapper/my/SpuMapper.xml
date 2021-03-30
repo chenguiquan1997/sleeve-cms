@@ -35,9 +35,9 @@
         <result column="category_name" property="categoryName"></result>
         <result column="default_sku" property="defaultSku"></result>
         <!--轮播图集合，ofType是实体类中相应字段的类型，必须添加，否则会报空指针异常-->
-        <collection property="forThemeImgs" ofType="java.lang.String">
+        <collection property="rotationImgs" ofType="java.lang.String">
             <constructor>
-                <arg column="for_theme_img"></arg>
+                <arg column="rotation_img"></arg>
             </constructor>
         </collection>
         <!--详情图集合-->
@@ -59,17 +59,22 @@
 
     <!--根据spuid查询指定spu详情数据-->
     <select id="searchSpuDetailById" resultMap="SpuDetailResultMap">
-        select spu.*,
-               c.name as category_name,
-               sku.title as default_sku,
-               img.img as for_theme_img,
-               sdimg.img as spu_detail_img
+         select spu.*,
+                sku.title as default_sku,
+                img.img as rotation_img,
+                sdimg.img as spu_detail_img
         from spu
-        join category c on spu.category_id = c.id
-        join sku on spu.default_sku_id = sku.id
-        join spu_img img on spu.id = img.spu_id
-        join spu_detail_img sdimg on spu.id = sdimg.spu_id
+        left join sku on spu.default_sku_id = sku.id
+        left join spu_img img on spu.id = img.spu_id
+        left join spu_detail_img sdimg on spu.id = sdimg.spu_id
         where spu.id = #{spuId}
+    </select>
+
+    <!--查询当前SPU所属分类,从根分类，一直到直属分类-->
+    <select id="searchCurrSpuBelongCategory" resultType="java.util.HashMap">
+        select
+        (select cc.name from category cc where cc.id = (select parent_id from category c where c.id = #{categoryId})) as root_category,
+        (select c.name from category c where c.id = #{categoryId}) as directly_category
     </select>
 
     <!--根据spuId查询当前spu所拥有的所有规格-->
@@ -80,6 +85,16 @@
        where spk.spu_id = #{spuId}
     </select>
 
+    <!--创建 SPU，返回自增主键 id-->
+    <insert id="insertSpu" keyProperty="id" useGeneratedKeys="true" parameterType="io.github.talelin.latticy.model.my.Spu">
+        INSERT INTO spu ( title, subtitle, online, price, sketch_spec_id, discount_price, img, spu_theme_img, category_id, root_category_id, tags )
+        VALUES ( #{spu.title}, #{spu.subtitle}, #{spu.online}, #{spu.price}, #{spu.sketchSpecId}, #{spu.discountPrice},
+                 #{spu.img}, #{spu.spuThemeImg}, #{spu.categoryId}, #{spu.rootCategoryId}, #{spu.tags} )
+    </insert>
 
+    <!--逻辑删除SPU-->
+    <delete id="removeSpuById" parameterType="java.lang.Long">
+       update spu set delete_time = now() where id = #{id} and delete_time is null
+    </delete>
 
 </mapper>

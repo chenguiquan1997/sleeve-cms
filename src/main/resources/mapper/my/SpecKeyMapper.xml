@@ -19,5 +19,10 @@
       where delete_time is null
     </select>
 
+    <!--查询所有规格名列表-->
+    <select id="searchSpecNameList" resultType="java.lang.String">
+        select `name` from spec_key where delete_time is null
+    </select>
+
 
 </mapper>

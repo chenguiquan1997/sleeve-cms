@@ -60,7 +60,7 @@ public class BannerItemController {
      * 获取banner-item所有类型列表
      * @return
      */
-    @RequestMapping("/search/types")
+    @GetMapping("/search/types")
     public List<Map<String,String>> searchItemTypes() {
        List<Map<String,String>> typeList = bannerItemTypeService.searchAll();
        return typeList;
@@ -71,7 +71,7 @@ public class BannerItemController {
      * @param id
      * @return
      */
-    @RequestMapping("/search/{id}")
+    @GetMapping("/search/{id}")
     public BannerItemVO searchItemById(@PathVariable(name = "id") @Positive @NotNull Long id) {
         BannerItem bannerItem = bannerItemService.searchOneById(id);
         return new BannerItemVO(bannerItem);

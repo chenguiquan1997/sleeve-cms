@@ -8,6 +8,7 @@ import java.io.Serializable;
  * @Author Guiquan Chen
  * @Date 2021/2/24 16:34
  * @Version 1.0
+ * 六宫格实体类
  */
 @Data
 public class Grid implements Serializable {

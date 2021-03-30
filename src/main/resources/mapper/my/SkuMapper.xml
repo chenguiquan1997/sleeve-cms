@@ -21,10 +21,10 @@
         <result column="delete_time" property="deleteTime"></result>
     </resultMap>
 
-    <select id="searchSkuListBySpuId" resultType="java.util.HashMap">
+    <select id="searchSkuListBySpuId" resultMap="BaseResultMap">
         select sku.id, sku.title
         from sku
-        where sku.spu_id = #{spuId}
+        where sku.spu_id = #{spuId} and delete_time is null
     </select>
 
 

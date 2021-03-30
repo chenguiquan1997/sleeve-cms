@@ -4,6 +4,7 @@ import io.github.talelin.latticy.mapper.my.SkuMapper;
 import io.github.talelin.latticy.service.imy.ISkuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import io.github.talelin.latticy.model.my.Sku;
 
 import java.util.List;
 import java.util.Map;
@@ -20,7 +21,7 @@ public class SkuServiceImpl implements ISkuService {
      * @return
      */
     @Override
-    public List<Map<Long, String>> searchSkuListBySpuId(Long spuId) {
+    public List<Sku> searchSkuListBySpuId(Long spuId) {
         return skuMapper.searchSkuListBySpuId(spuId);
     }
 }
