@@ -4,14 +4,15 @@ lin:
   file:
     # 文件服务域名
     # http://localhost:5000/
-    domain: http://qocfrob1z.hn-bkt.clouddn.com/
+    # http://qocfrob1z.hn-bkt.clouddn.com/
+    domain: http://localhost:5000/
     # 七牛
-    qiniuyun:
-      access-key: prKsiQeJs9fo7QYoHz3HLmNxI9EzLSLLDtr-Nm4V
-      secret-key: LUME7y70iQ-7uGCHs1GhKN3tUiNcZy5PnH3if6Y7
-      bucket: sleeves
+#    qiniuyun:
+#      access-key: prKsiQeJs9fo7QYoHz3HLmNxI9EzLSLLDtr-Nm4V
+#      secret-key: LUME7y70iQ-7uGCHs1GhKN3tUiNcZy5PnH3if6Y7
+#      bucket: sleeves
     # 具体实现
-    uploader: qiniuyun
+#    uploader: qiniuyun
     # 排除文件类型
     exclude:
     # 包括文件类型
@@ -22,11 +23,12 @@ lin:
     # 文件最大数量
     nums: 10
     # 服务器文件路径
-    serve-path: sleeves/**
+    # sleeves/**
+    serve-path: assets/**
     # 单个文件最大体积
     single-limit: 2MB
     # 本地文件保存位置
-    # store-dir: assets/
+    store-dir: assets/
 spring:
   servlet:
     multipart:

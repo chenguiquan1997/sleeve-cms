@@ -260,7 +260,7 @@ public class CategoryServiceImpl implements ICategoryService {
      */
     @Override
     public String searchNameByParentId(Long parentId) {
-        String nullName = new String("无");
+        String nullName = "无";
         if(parentId == null  || parentId <= 0) return nullName;
         String name = categoryMapper.searchNameByParentId(parentId);
         if(name == null) return nullName;

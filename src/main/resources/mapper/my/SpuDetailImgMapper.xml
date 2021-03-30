@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.talelin.latticy.mapper.my.SpuDetailImgMapper">
+    <resultMap id="BaseResultMap" type="io.github.talelin.latticy.model.my.SpuDetailImg">
+
+    </resultMap>
+
+    <!--将指定spu的详情图数据，循环插入到数据表中-->
+    <insert id="addDetailImgs" parameterType="java.util.List">
+        insert into spu_detail_img(img, spu_id, `index`)
+        values
+        <foreach collection="detailImgs" item="img" index="index" separator=",">
+            (#{img.img}, #{img.spuId}, #{img.idx})
+        </foreach>
+    </insert>
+
+    <!--删除指定spu下的详情图片-->
+    <delete id="removeDetailImgsBySpuId" parameterType="java.lang.Long">
+        delete from spu_detail_img where spu_id = #{spuId}
+    </delete>
+
+</mapper>

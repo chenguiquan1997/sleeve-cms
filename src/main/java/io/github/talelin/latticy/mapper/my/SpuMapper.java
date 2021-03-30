@@ -39,4 +39,16 @@ public interface SpuMapper extends BaseMapper<Spu> {
      * @return
      */
     List<Map<Object,Object>> searchSpecBySpuId(@Param("spuId") Long spuId);
+
+    /**
+     * 创建 SPU，返回自增主键 id
+     * @param spu
+     */
+    void insertSpu(@Param("spu") Spu spu);
+
+    /**
+     * 逻辑删除 spu
+     * @param id
+     */
+    void removeSpuById(@Param("id") Long id);
 }

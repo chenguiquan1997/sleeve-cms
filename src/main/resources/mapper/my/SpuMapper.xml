@@ -85,6 +85,16 @@
        where spk.spu_id = #{spuId}
     </select>
 
+    <!--创建 SPU，返回自增主键 id-->
+    <insert id="insertSpu" keyProperty="id" useGeneratedKeys="true" parameterType="io.github.talelin.latticy.model.my.Spu">
+        INSERT INTO spu ( title, subtitle, online, price, sketch_spec_id, discount_price, img, spu_theme_img, category_id, root_category_id, tags )
+        VALUES ( #{spu.title}, #{spu.subtitle}, #{spu.online}, #{spu.price}, #{spu.sketchSpecId}, #{spu.discountPrice},
+                 #{spu.img}, #{spu.spuThemeImg}, #{spu.categoryId}, #{spu.rootCategoryId}, #{spu.tags} )
+    </insert>
 
+    <!--逻辑删除SPU-->
+    <delete id="removeSpuById" parameterType="java.lang.Long">
+       update spu set delete_time = now() where id = #{id} and delete_time is null
+    </delete>
 
 </mapper>

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,11 +33,11 @@ public class SpuOutlineVO<T> {
     /**
      * 商品价格
      */
-    private String price;
+    private BigDecimal price;
     /**
      * 商品折扣价
      */
-    private String discountPrice;
+    private BigDecimal discountPrice;
     /**
      * 商品描述
      */
@@ -44,11 +45,11 @@ public class SpuOutlineVO<T> {
     /**
      * 当前商品所属分类id
      */
-    private Integer categoryId;
+    private Long categoryId;
     /**
      * 当前商品所属一级分类id
      */
-    private Integer rootCategoryId;
+    private Long rootCategoryId;
     /**
      * 当前商品所属分类名
      */
