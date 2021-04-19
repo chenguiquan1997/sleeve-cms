@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.talelin.latticy.mapper.my.SkuSpecMapper">
+
+    <resultMap id="BaseResultMap" type="io.github.talelin.latticy.model.my.SkuSpec">
+        <result column="spu_id" jdbcType="INTEGER" property="spuId"/>
+        <result column="sku_id" jdbcType="INTEGER" property="skuId"/>
+        <result column="key_id" jdbcType="INTEGER" property="keyId"/>
+        <result column="key_name" jdbcType="VARCHAR" property="keyName"/>
+        <result column="value_id" jdbcType="INTEGER" property="valueId"/>
+        <result column="value_name" jdbcType="VARCHAR" property="valueName"/>
+    </resultMap>
+
+    <!--获取指定SKU所拥有的规格-->
+    <select id="searchSkuSpecBySkuId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select ss.spu_id, ss.sku_id, sk.id as key_id, sk.name as key_name, sv.id as value_id, sv.value as value_name
+        from sku_spec ss
+        join spec_key sk on ss.key_id = sk.id
+        join spec_value sv on ss.value_id = sv.id
+        where ss.sku_id = #{skuId}
+    </select>
+
+
+</mapper>

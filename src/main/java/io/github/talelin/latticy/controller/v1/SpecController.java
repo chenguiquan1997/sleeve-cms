@@ -194,4 +194,17 @@ public class SpecController {
         return SpecSketchVO.convert(specKeys);
     }
 
+    /**
+     * @Description: 根据规格id，获取所有对应的规格值数据
+     * @param id
+     * @return java.util.List<io.github.talelin.latticy.vo.my.SpecValueVO>
+     * @Author: Guiquan Chen
+     * @Date: 2021/4/13
+     */
+    @GetMapping("/values/{id}")
+    public List<SpecValueVO> getSpecValues(@PathVariable("id") @Positive Long id) {
+       List<SpecValue> specValues = specValueService.getSpecValues(id);
+       return SpecValueVO.convert(specValues);
+    }
+
 }

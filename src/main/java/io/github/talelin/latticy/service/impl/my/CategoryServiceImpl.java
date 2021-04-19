@@ -1,6 +1,6 @@
 package io.github.talelin.latticy.service.impl.my;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import io.github.talelin.autoconfigure.exception.NotFoundException;

@@ -1,24 +1,28 @@
-package io.github.talelin.latticy.model.my;
+package io.github.talelin.latticy.bo.my;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
+import io.github.talelin.latticy.model.my.SkuSpec;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
+/**
+ * @Author Guiquan Chen
+ * @Date 2021/4/12 17:33
+ * @Version 1.0
+ * SKU 详情的业务实体类
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Sku extends BaseEntity implements Serializable {
-
-    private static final long serialVersionUID = -961548821210744521L;
+@Builder
+public class SkuBO {
     /**
      * id
      */
-    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
     /**
      * 价格
@@ -41,11 +45,15 @@ public class Sku extends BaseEntity implements Serializable {
      */
     private String title;
     /**
-     * 所属SPU Id
+     * 所属SPU id
      */
     private Long spuId;
     /**
-     * sku 规格
+     * 所属SPU 名称
+     */
+    private String belongSpu;
+    /**
+     * sku 拥有的规格
      */
     private String specs;
     /**
@@ -57,11 +65,7 @@ public class Sku extends BaseEntity implements Serializable {
      */
     private Integer stock;
     /**
-     * 所属父级分类
+     * 当前sku所拥有的规格
      */
-    private Long categoryId;
-    /**
-     * 所属一级分类
-     */
-    private Long rootCategoryId;
+    private List<SkuSpec> skuSpecs;
 }

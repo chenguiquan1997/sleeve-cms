@@ -22,4 +22,6 @@ public interface SpecValueMapper extends BaseMapper<SpecValue> {
      * @return
      */
     List<SpecValue> searchNameList();
+
+
 }

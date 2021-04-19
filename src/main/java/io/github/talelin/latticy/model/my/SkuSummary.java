@@ -6,19 +6,22 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
+/**
+ * @Author Guiquan Chen
+ * @Date 2021/3/30 17:14
+ * @Version 1.0
+ * 存储Sku概要业务实体类
+ */
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class Sku extends BaseEntity implements Serializable {
-
-    private static final long serialVersionUID = -961548821210744521L;
+@AllArgsConstructor
+public class SkuSummary {
     /**
      * id
      */
-    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
     /**
      * 价格
@@ -41,27 +44,19 @@ public class Sku extends BaseEntity implements Serializable {
      */
     private String title;
     /**
-     * 所属SPU Id
+     * spu id
      */
     private Long spuId;
     /**
-     * sku 规格
+     * 所属 spu
      */
-    private String specs;
-    /**
-     * 当前sku 唯一识别码
-     */
-    private String code;
+    private String belongSpu;
     /**
      * 库存
      */
     private Integer stock;
     /**
-     * 所属父级分类
+     * 创建时间
      */
-    private Long categoryId;
-    /**
-     * 所属一级分类
-     */
-    private Long rootCategoryId;
+    private Date createTime;
 }

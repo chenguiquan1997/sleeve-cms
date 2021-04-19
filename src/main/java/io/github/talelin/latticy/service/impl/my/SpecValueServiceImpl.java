@@ -12,6 +12,7 @@ import io.github.talelin.latticy.dto.my.SpecValueUpdateDTO;
 import io.github.talelin.latticy.mapper.my.SpecValueMapper;
 import io.github.talelin.latticy.model.my.SpecValue;
 import io.github.talelin.latticy.service.imy.ISpecValueService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@Slf4j
 public class SpecValueServiceImpl implements ISpecValueService {
 
     @Autowired
@@ -179,5 +181,24 @@ public class SpecValueServiceImpl implements ISpecValueService {
            throw new DeleteException(21002);
         }
 
+    }
+
+    /**
+     * @Description: 根据规格id，获取所有对应的规格值数据
+     * @param id specKeyId
+     * @return java.util.List<io.github.talelin.latticy.model.my.SpecValue>
+     * @Author: Guiquan Chen
+     * @Date: 2021/4/13
+     */
+    @Override
+    public List<SpecValue> getSpecValues(Long id) {
+        QueryWrapper<SpecValue> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("key_id",id).isNull("delete_time");
+        List<SpecValue> specValues = specValueMapper.selectList(queryWrapper);
+        if(specValues == null || specValues.size() < 1) {
+            log.error("当前规格无规格值，specKeyId=[{}]",id);
+            throw new NotFoundException(23006);
+        }
+        return specValues;
     }
 }

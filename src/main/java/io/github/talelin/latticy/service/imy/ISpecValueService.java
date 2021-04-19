@@ -5,6 +5,8 @@ import io.github.talelin.latticy.dto.my.SpecValueDTO;
 import io.github.talelin.latticy.dto.my.SpecValueUpdateDTO;
 import io.github.talelin.latticy.model.my.SpecValue;
 
+import java.util.List;
+
 public interface ISpecValueService {
 
     /**
@@ -39,4 +41,11 @@ public interface ISpecValueService {
      * @param id
      */
     void delete(Long id);
+
+    /**
+     * 根据规格id，获取所有对应的规格值数据
+     * @param id
+     * @return
+     */
+    List<SpecValue> getSpecValues(Long id);
 }
