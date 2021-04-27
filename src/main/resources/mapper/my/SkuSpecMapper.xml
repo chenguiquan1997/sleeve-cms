@@ -20,5 +20,19 @@
         where ss.sku_id = #{skuId}
     </select>
 
+    <!--删除指定sku所拥有的规格-->
+    <delete id="removeSpecBySkuId" parameterType="java.lang.Long">
+        delete from sku_spec where sku_id = #{skuId}
+    </delete>
+
+    <!--添加指定sku所拥有的规格-->
+    <insert id="addSkuSpecs" parameterType="java.util.List">
+        insert into sku_spec(spu_id, sku_id, key_id, value_id)
+        values
+        <foreach collection="specs" item="spec" index="index" separator=",">
+            (#{spec.spuId}, #{spec.skuId}, #{spec.keyId}, #{spec.valueId})
+        </foreach>
+    </insert>
+
 
 </mapper>

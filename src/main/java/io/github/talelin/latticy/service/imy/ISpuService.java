@@ -5,6 +5,7 @@ import io.github.talelin.latticy.bo.my.SpuDetailBO;
 import io.github.talelin.latticy.dto.my.SpuSaveDTO;
 import io.github.talelin.latticy.dto.my.SpuUpdateDTO;
 import io.github.talelin.latticy.model.my.SpuOutline;
+import io.github.talelin.latticy.model.my.SpuSpec;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -18,36 +19,37 @@ public interface ISpuService {
      * @return
      */
     IPage<SpuOutline> searchSpuOutline(Integer page, Integer count);
-
     /**
      * 根据spuId查询商品详情
      * @param spuId
      * @return
      */
     SpuDetailBO searchSpuDetailById(Long spuId);
-
     /**
      * 根据spuId 查询当前spu所拥有的商品规格
      * @param spuId
      * @return
      */
     List<Map<Object,Object>> searchSpecBySpuId(Long spuId);
-
     /**
      * 更新 spu
      * @param spuUpdateDTO
      */
     void update(SpuUpdateDTO spuUpdateDTO);
-
     /**
      * 保存 spu
      * @param spuSaveDTO
      */
     void save(SpuSaveDTO spuSaveDTO);
-
     /**
      * 逻辑删除 spu
      * @param id
      */
     void removeSpuById(Long id);
+    /**
+     * 根据 spu id，查询所属 SPU
+     * @param spuId
+     * @return
+     */
+    List<SpuSpec> searchSpuSpec(Long spuId);
 }

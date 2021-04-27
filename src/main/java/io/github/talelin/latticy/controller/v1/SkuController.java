@@ -2,8 +2,12 @@ package io.github.talelin.latticy.controller.v1;
 
 import io.github.talelin.latticy.bo.my.SkuBO;
 import io.github.talelin.latticy.common.util.CommonUtils;
+import io.github.talelin.latticy.dto.my.SkuSaveDTO;
+import io.github.talelin.latticy.dto.my.SkuUpdateDTO;
 import io.github.talelin.latticy.model.my.Page;
 import io.github.talelin.latticy.service.imy.ISkuService;
+import io.github.talelin.latticy.vo.CreatedVO;
+import io.github.talelin.latticy.vo.UpdatedVO;
 import io.github.talelin.latticy.vo.my.SkuDetailVO;
 import io.github.talelin.latticy.vo.my.SkuOutlineVO;
 import io.github.talelin.latticy.vo.my.SpuOwnSkusVO;
@@ -66,5 +70,24 @@ public class SkuController {
     public SkuDetailVO getSkuDetail(@PathVariable("id") @Positive Long id) {
         SkuBO skuBO = skuService.searchSkuDetailBySkuId(id);
         return SkuDetailVO.convert(skuBO);
+    }
+
+    @PostMapping("/save")
+    public CreatedVO save(@RequestBody SkuSaveDTO skuSaveDTO) {
+        System.out.println();
+        return null;
+    }
+
+    /**
+     * @Description: 更新sku
+     * @param skuUpdateDTO
+     * @return io.github.talelin.latticy.vo.UpdatedVO
+     * @Author: Guiquan Chen
+     * @Date: 2021/4/27
+     */
+    @PutMapping("/update")
+    public UpdatedVO update(@RequestBody SkuUpdateDTO skuUpdateDTO) {
+        skuService.update(skuUpdateDTO);
+        return new UpdatedVO(2);
     }
 }

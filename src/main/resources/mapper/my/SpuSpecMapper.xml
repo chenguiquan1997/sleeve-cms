@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.talelin.latticy.mapper.my.SpuSpecMapper">
+
+    <resultMap id="baseResultMap" type="io.github.talelin.latticy.model.my.SpuSpec">
+        <id column="spu_id" jdbcType="BIGINT" property="spuId"/>
+        <result column="key_id" jdbcType="BIGINT" property="keyId"/>
+        <result column="key_name" jdbcType="VARCHAR" property="keyName"/>
+    </resultMap>
+
+    <!--根据 spu id，查询所属 SPU-->
+    <select id="searchSpuSpecBySpuId" parameterType="java.lang.Long" resultMap="baseResultMap">
+        select sk.spu_id, sk.spec_key_id as key_id, spk.name as key_name
+        from spu_key sk
+        join spec_key spk on sk.spec_key_id = spk.id
+        where sk.spu_id = #{spuId} and spk.delete_time is null
+    </select>
+</mapper>

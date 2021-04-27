@@ -1,6 +1,7 @@
 package io.github.talelin.latticy.mapper.my;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import io.github.talelin.latticy.bo.my.SpecJsonBO;
 import io.github.talelin.latticy.model.my.SkuSpec;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -21,4 +22,16 @@ public interface SkuSpecMapper extends BaseMapper<SkuSpec> {
      * @return
      */
     List<SkuSpec> searchSkuSpecBySkuId(@Param("skuId") Long skuId);
+
+    /**
+     * 删除指定sku所拥有的规格
+     * @param skuId
+     */
+    void removeSpecBySkuId(@Param("skuId") Long skuId);
+
+    /**
+     * 添加指定sku所拥有的规格
+     * @param skuSpecs
+     */
+    void addSkuSpecs(@Param("specs") List<SkuSpec> skuSpecs);
 }

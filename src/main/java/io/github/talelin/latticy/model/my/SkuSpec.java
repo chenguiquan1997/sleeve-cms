@@ -1,9 +1,16 @@
 package io.github.talelin.latticy.model.my;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import io.github.talelin.latticy.dto.my.BelongSpec;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Author Guiquan Chen
@@ -15,8 +22,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SkuSpec {
+public class SkuSpec implements Serializable {
 
+    private static final long serialVersionUID = -8754270499866251255L;
+    /**
+     * id
+     */
+    @TableId(value = "id", type = IdType.AUTO)
+    private Long id;
     /**
      * spu id
      */
@@ -41,5 +54,20 @@ public class SkuSpec {
      * 规格值
      */
     private String valueName;
+
+    public static List<SkuSpec> convert(List<BelongSpec> belongSpecs, Long skuId, Long spuId) {
+        List<SkuSpec> skuSpecs = new ArrayList<>();
+        if(belongSpecs.size() < 1 || belongSpecs == null) return skuSpecs;
+        belongSpecs.forEach(belongSpec -> {
+            SkuSpec skuSpec = SkuSpec.builder()
+                    .spuId(spuId)
+                    .skuId(skuId)
+                    .keyId(belongSpec.getKeyId())
+                    .valueId(belongSpec.getValueId())
+                    .build();
+            skuSpecs.add(skuSpec);
+        });
+        return skuSpecs;
+    }
 
 }

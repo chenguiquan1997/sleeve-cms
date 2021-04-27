@@ -75,6 +75,26 @@ public class SkuDetailVO {
         SkuDetailVO skuDetailVO = new SkuDetailVO();
         if(skuBO == null) return skuDetailVO;
         BeanUtils.copyProperties(skuBO,skuDetailVO);
+        skuDetailVO.setSkuSpecs(skuDetailVO.integration(skuDetailVO.getSkuSpecs()));
         return skuDetailVO;
+    }
+
+    /**
+     * @Description: 将规格值id和规格值整合到一起
+     * @param skuSpecs 当前sku所拥有的规格
+     * @return java.util.List<io.github.talelin.latticy.model.my.SkuSpec>
+     * @Author: Guiquan Chen
+     * @Date: 2021/4/20
+     */
+    private List<SkuSpec> integration(List<SkuSpec> skuSpecs) {
+        if(skuSpecs == null || skuSpecs.size() < 1) return null;
+        skuSpecs.forEach(spec -> {
+            StringBuffer buffer = new StringBuffer();
+            Long valueId = spec.getValueId();
+            String valueName = spec.getValueName();
+            buffer.append(valueId.toString()).append(" - ").append(valueName);
+            spec.setValueName(buffer.toString());
+        });
+        return skuSpecs;
     }
 }
