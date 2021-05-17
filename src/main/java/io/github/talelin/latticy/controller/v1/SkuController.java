@@ -2,6 +2,7 @@ package io.github.talelin.latticy.controller.v1;
 
 import io.github.talelin.latticy.bo.my.SkuBO;
 import io.github.talelin.latticy.common.util.CommonUtils;
+import io.github.talelin.latticy.common.util.LocalParams;
 import io.github.talelin.latticy.dto.my.SkuSaveDTO;
 import io.github.talelin.latticy.dto.my.SkuUpdateDTO;
 import io.github.talelin.latticy.model.my.Page;
@@ -32,8 +33,8 @@ public class SkuController {
 
     /**
      * @Description: 分页查询 sku 概要
-     * @param page
-     * @param count
+     * @param page 当前页码
+     * @param count 当前页数据量
      * @return io.github.talelin.latticy.model.my.Page
      * @Author: Guiquan Chen
      * @Date: 2021/4/12
@@ -45,6 +46,26 @@ public class SkuController {
                               @Min(value = 3) @Max(value = 30) Integer count) {
         Map<String,Integer> pageMap = CommonUtils.convertPageParams(page,count);
         Page skuPage = skuService.searchSkuListByPage(pageMap,count);
+        return skuPage;
+    }
+
+    /**
+     * @Description: 分页查询指定Spu下的sku列表
+     * @param page 当前页码
+     * @param count 当前页数据量
+     * @param spuId spu id
+     * @return io.github.talelin.latticy.model.my.Page
+     * @Author: Guiquan Chen
+     * @Date: 2021/5/4
+     */
+    @GetMapping("/summary/{id}")
+    public Page getSkuSummaryBySpuId(@RequestParam(name = "page",defaultValue = "1")
+                              @Min(value = 1) Integer page,
+                              @RequestParam(name = "count", defaultValue = "10")
+                              @Min(value = 3) @Max(value = 30) Integer count,
+                              @PathVariable("id") @Positive Long spuId) {
+        Map<String,Integer> pageMap = CommonUtils.convertPageParams(page,count);
+        Page skuPage = skuService.searchSkuListBySpuId(pageMap,count,spuId);
         return skuPage;
     }
 
@@ -72,10 +93,18 @@ public class SkuController {
         return SkuDetailVO.convert(skuBO);
     }
 
+    /**
+     * @Description: 创建 SKU
+     * @param skuSaveDTO
+     * @return io.github.talelin.latticy.vo.CreatedVO
+     * @Author: Guiquan Chen
+     * @Date: 2021/5/4
+     */
     @PostMapping("/save")
     public CreatedVO save(@RequestBody SkuSaveDTO skuSaveDTO) {
-        System.out.println();
-        return null;
+        LocalParams.setParams(skuSaveDTO.toString());
+        skuService.save(skuSaveDTO);
+        return new CreatedVO(1);
     }
 
     /**
@@ -87,6 +116,7 @@ public class SkuController {
      */
     @PutMapping("/update")
     public UpdatedVO update(@RequestBody SkuUpdateDTO skuUpdateDTO) {
+        LocalParams.setParams(skuUpdateDTO.toString());
         skuService.update(skuUpdateDTO);
         return new UpdatedVO(2);
     }

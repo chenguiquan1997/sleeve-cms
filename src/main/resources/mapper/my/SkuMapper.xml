@@ -42,9 +42,24 @@
         where sku.delete_time is null limit #{start}, #{count}
     </select>
 
+    <!--分页查询指定Spu下的sku列表-->
+    <select id="searchSkuListBySpu" resultMap="BaseResultMap">
+        select sku.id, sku.price, sku.discount_price, sku.title, sku.online, sku.spu_id,
+               sku.img, sku.stock, sku.create_time, sku.update_time
+        from sku
+        where sku.spu_id = #{spuId} and sku.delete_time is null
+        order by sku.update_time desc
+        limit #{start}, #{count}
+    </select>
+
     <!--查询sku的总数量-->
     <select id="searchAllSkuCount" resultType="java.lang.Integer">
         select count(*) from sku where delete_time is null
+    </select>
+
+    <!--查询指定spu下的，sku的总数量-->
+    <select id="searchAllSkuCountWithSpu" resultType="java.lang.Integer">
+        select count(*) from sku where spu_id = #{spuId} and delete_time is null
     </select>
 
 </mapper>

@@ -20,7 +20,7 @@
     <!--根据规格名，分页查询对应的规格值-->
     <select id="searchAllSpecValueByKey" resultMap="BaseResultMap">
       select * from spec_value
-      where delete_time is null and key_id = #{keyId}
+      where delete_time is null and key_id = #{keyId} order by update_time desc
     </select>
 
     <!--查询规格值名称列表-->

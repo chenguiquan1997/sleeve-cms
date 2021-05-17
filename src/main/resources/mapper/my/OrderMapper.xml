@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.talelin.latticy.mapper.my.OrderMapper">
+    <resultMap id="BaseResultMap" type="io.github.talelin.latticy.model.my.Orders">
+        <id column="id" jdbcType="BIGINT" property="id" javaType="Long"></id>
+        <result column="order_no" jdbcType="VARCHAR" property="orderNo" javaType="String"></result>
+        <result column="total_count" jdbcType="INTEGER" property="totalCount" javaType="Integer"></result>
+        <result column="total_price" jdbcType="DECIMAL" property="totalPrice" javaType="BigDecimal"></result>
+        <result column="final_total_price" jdbcType="DECIMAL" property="finalTotalPrice" javaType="BigDecimal"></result>
+        <result column="snap_items" jdbcType="VARCHAR" property="snapItems" javaType="String"></result>
+        <result column="snap_address" jdbcType="VARCHAR" property="snapAddress" javaType="String"></result>
+        <result column="user_id" jdbcType="BIGINT" property="userId" javaType="Long"></result>
+        <result column="status" jdbcType="INTEGER" property="status" javaType="Integer"></result>
+        <result column="prepay_id" jdbcType="VARCHAR" property="prepayId" javaType="String"></result>
+        <result column="expire_time" jdbcType="TIMESTAMP" property="expireTime" javaType="Date"></result>
+        <result column="placed_time" jdbcType="TIMESTAMP" property="placedTime" javaType="Date"></result>
+        <result column="summary_title" jdbcType="VARCHAR" property="summaryTitle" javaType="String"></result>
+        <result column="receiver" jdbcType="VARCHAR" property="receiver" javaType="String"></result>
+        <result column="phone" jdbcType="VARCHAR" property="phone" javaType="String"></result>
+    </resultMap>
+
+    <!--分页获取订单列表数据-->
+    <select id="searchOrderListByPage" resultMap="BaseResultMap">
+      select id, order_no, summary_title, total_count,total_price, final_total_price, status, placed_time, receiver, phone
+      from orders
+      where delete_time is null
+        <if test="conditions.receiver != null">
+            and receiver = #{conditions.receiver}
+        </if>
+        <if test="conditions.phone != null">
+            and phone = #{conditions.phone}
+        </if>
+        <if test="conditions.orderNo != null">
+            and order_no = #{conditions.orderNo}
+        </if>
+        <if test="conditions.status != null">
+            and status = #{conditions.status}
+        </if>
+        <if test="conditions.startTime != null and conditions.endTime != null">
+            and placed_time between #{conditions.startTime} and #{conditions.endTime}
+        </if>
+      order by placed_time desc limit #{startCount}, #{size}
+    </select>
+
+    <select id="getOrderTotalCount" resultType="java.lang.Integer">
+        select count(*)
+        from orders
+        where delete_time is null
+            <if test="conditions.receiver != null">
+                and receiver = #{conditions.receiver}
+            </if>
+            <if test="conditions.phone != null">
+                and phone = #{conditions.phone}
+            </if>
+            <if test="conditions.orderNo != null">
+                and order_no = #{conditions.orderNo}
+            </if>
+            <if test="conditions.status != null">
+                and status = #{conditions.status}
+            </if>
+            <if test="conditions.startTime != null and conditions.endTime != null">
+                and placed_time between #{conditions.startTime} and #{conditions.endTime}
+            </if>
+    </select>
+</mapper>

@@ -1,6 +1,7 @@
 package io.github.talelin.latticy.service.imy;
 
 import io.github.talelin.latticy.bo.my.SkuBO;
+import io.github.talelin.latticy.dto.my.SkuSaveDTO;
 import io.github.talelin.latticy.dto.my.SkuUpdateDTO;
 import io.github.talelin.latticy.model.my.Page;
 import io.github.talelin.latticy.model.my.Sku;
@@ -28,6 +29,15 @@ public interface ISkuService {
     Page searchSkuListByPage(Map<String,Integer> pageMap, Integer size);
 
     /**
+     * 分页查询指定Spu下的sku列表
+     * @param pageMap 分页参数
+     * @param size 每页数据量
+     * @param spuId spu id
+     * @return
+     */
+     Page searchSkuListBySpuId(Map<String,Integer> pageMap, Integer size, Long spuId);
+
+    /**
      * 根据 sku id , 获取 sku 详情
      * @param skuId
      * @return
@@ -40,5 +50,10 @@ public interface ISkuService {
      */
     void update(SkuUpdateDTO skuUpdateDTO);
 
+    /**
+     * 创建 sku
+     * @param skuSaveDTO
+     */
+    void save(SkuSaveDTO skuSaveDTO);
 
 }

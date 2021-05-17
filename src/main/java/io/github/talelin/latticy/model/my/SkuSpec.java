@@ -55,6 +55,15 @@ public class SkuSpec implements Serializable {
      */
     private String valueName;
 
+    /**
+     * @Description: 向 sku-spec 表添加数据时，用到的数据结构
+     * @param belongSpecs 当前 sku 所拥有的规格
+     * @param skuId
+     * @param spuId
+     * @return java.util.List<io.github.talelin.latticy.model.my.SkuSpec>
+     * @Author: Guiquan Chen
+     * @Date: 2021/5/3
+     */
     public static List<SkuSpec> convert(List<BelongSpec> belongSpecs, Long skuId, Long spuId) {
         List<SkuSpec> skuSpecs = new ArrayList<>();
         if(belongSpecs.size() < 1 || belongSpecs == null) return skuSpecs;

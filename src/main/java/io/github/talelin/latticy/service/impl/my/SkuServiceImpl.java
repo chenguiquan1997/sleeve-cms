@@ -3,7 +3,10 @@ package io.github.talelin.latticy.service.impl.my;
 import com.alibaba.fastjson.JSON;
 import io.github.talelin.latticy.bo.my.SkuBO;
 import io.github.talelin.latticy.bo.my.SpecJsonBO;
+import io.github.talelin.latticy.common.exception.SaveException;
 import io.github.talelin.latticy.common.exception.UpdateException;
+import io.github.talelin.latticy.dto.my.BelongSpec;
+import io.github.talelin.latticy.dto.my.SkuSaveDTO;
 import io.github.talelin.latticy.dto.my.SkuUpdateDTO;
 import io.github.talelin.latticy.mapper.my.SkuMapper;
 import io.github.talelin.latticy.mapper.my.SkuSpecMapper;
@@ -46,6 +49,7 @@ public class SkuServiceImpl implements ISkuService {
     /**
      * @Description: 分页查询sku
      * @param pageMap 分页参数
+     * @param size 当前页数据量
      * @return io.github.talelin.latticy.model.my.Page<io.github.talelin.latticy.model.my.Sku>
      * @Author: Guiquan Chen
      * @Date: 2021/3/30
@@ -57,6 +61,26 @@ public class SkuServiceImpl implements ISkuService {
             return new Page();
         }
         List<SkuSummary> skus = skuMapper.searchSkuListByPage(pageMap.get("startCount"),size);
+        Page skuPage = new Page<>(count,skus,pageMap.get("currPage"),size);
+        return skuPage;
+    }
+
+    /**
+     * @Description: 分页查询指定Spu下的sku列表
+     * @param pageMap 分页参数
+     * @param size 当前页数据量
+     * @param spuId spu id
+     * @return io.github.talelin.latticy.model.my.Page
+     * @Author: Guiquan Chen
+     * @Date: 2021/5/4
+     */
+    @Override
+    public Page searchSkuListBySpuId(Map<String, Integer> pageMap, Integer size, Long spuId) {
+        Integer count = skuMapper.searchAllSkuCountWithSpu(spuId);
+        if(count < 1) {
+            return new Page();
+        }
+        List<SkuSummary> skus = skuMapper.searchSkuListBySpu(pageMap.get("startCount"),size,spuId);
         Page skuPage = new Page<>(count,skus,pageMap.get("currPage"),size);
         return skuPage;
     }
@@ -126,5 +150,66 @@ public class SkuServiceImpl implements ISkuService {
         skuSpecMapper.addSkuSpecs(skuSpecs);
         log.info("成功添加当前SKU规格，skuId=[{}]",skuUpdateDTO.getId());
         log.info("成功更新SKU信息，skuId=[{}]",skuUpdateDTO.getId());
+    }
+
+    /**
+     * @Description: 创建 SKU
+     * @param skuSaveDTO
+     * @return:
+     * @Author: Guiquan Chen
+     * @Date: 2021/5/3
+     */
+    @Transactional
+    @Override
+    public void save(SkuSaveDTO skuSaveDTO) {
+        Sku sku = new Sku();
+        BeanUtils.copyProperties(skuSaveDTO,sku);
+        String skuCode = this.buildCode(skuSaveDTO.getSpuId(),skuSaveDTO.getBelongSpecs());
+        sku.setCode(skuCode);
+        // 将规格转换为 json 格式
+        List<SpecJsonBO> specJsons = SpecJsonBO.convert(skuSaveDTO.getBelongSpecs());
+        String jsonSpecs = JSON.toJSONString(specJsons);
+        sku.setSpecs(jsonSpecs);
+        // 需要向sku实体对象中添加 category_id 和 root_category_id
+        Spu spu = spuMapper.selectById(skuSaveDTO.getSpuId());
+        sku.setCategoryId(spu.getCategoryId());
+        sku.setRootCategoryId(spu.getRootCategoryId());
+        Long id = -1L;
+        try {
+            // 插入 sku 数据
+            skuMapper.insert(sku);
+            id = sku.getId();
+            log.info("成功添加 SKU 数据到 sku 表，skuId=[{}]",id);
+        }catch (Exception e) {
+            log.error("添加 SKU 数据到 sku 表失败, skuId=[{}]",id,e);
+            throw new SaveException(25004);
+        }
+        // 将 sku 所拥有的规格，插入 sku-spec 表里
+        List<SkuSpec> skuSpecs = SkuSpec.convert(skuSaveDTO.getBelongSpecs(),id,skuSaveDTO.getSpuId());
+        try {
+            skuSpecMapper.addSkuSpecs(skuSpecs);
+            log.info("成功添加 sku 规格到 sku-spec 表，skuId=[{}]，spuId=[{}]",id,skuSaveDTO.getSpuId());
+        }catch (Exception e) {
+            log.error("添加 sku 规格到 sku-spec 表失败，skuId=[{}]，spuId=[{}]",id,skuSaveDTO.getSpuId());
+            throw new SaveException(25005);
+        }
+        log.info("创建 SKU 成功，skuId=[{}]",id);
+    }
+
+    /**
+     * 构建 sku 编码
+     * @param spuId
+     * @param belongSpecs
+     * @return
+     */
+    private String buildCode(Long spuId, List<BelongSpec> belongSpecs) {
+        StringBuffer code = new StringBuffer("");
+        if(spuId == null || belongSpecs == null || belongSpecs.size() < 1) return code.toString();
+        code.append(spuId).append("$");
+        belongSpecs.forEach(belongSpec -> {
+            code.append(belongSpec.getKeyId()).append("-");
+            code.append(belongSpec.getValueId()).append("#");
+        });
+        return code.substring(0,code.length() - 1);
     }
 }
