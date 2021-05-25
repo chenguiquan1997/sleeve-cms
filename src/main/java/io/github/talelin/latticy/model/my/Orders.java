@@ -46,6 +46,10 @@ public class Orders extends BaseEntity implements Serializable {
      */
     private BigDecimal finalTotalPrice;
     /**
+     * 订单主图
+     */
+    private String snapImg;
+    /**
      * 订单中的商品信息集合
      */
     private String snapItems;

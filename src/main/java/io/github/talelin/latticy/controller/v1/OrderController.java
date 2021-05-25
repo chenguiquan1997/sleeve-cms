@@ -4,9 +4,12 @@ import io.github.talelin.latticy.bo.my.OrderDetailBO;
 import io.github.talelin.latticy.bo.my.OrderSummaryBO;
 import io.github.talelin.latticy.common.util.CommonUtils;
 import io.github.talelin.latticy.common.util.DateUtil;
+import io.github.talelin.latticy.common.util.LocalParams;
 import io.github.talelin.latticy.dto.my.ConditionSearchDTO;
+import io.github.talelin.latticy.dto.my.OrderUpdateDTO;
 import io.github.talelin.latticy.model.my.Page;
 import io.github.talelin.latticy.service.imy.IOrderService;
+import io.github.talelin.latticy.vo.UpdatedVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -170,6 +173,20 @@ public class OrderController {
                 .build();
         Page<OrderSummaryBO> pageData = orderService.searchOrderListByPage(pageMap,count,c);
         return pageData;
+    }
+
+    /**
+     * @Description: 更新订单信息，以及为当前订单创建物流信息
+     * @param orderUpdateDTO
+     * @return io.github.talelin.latticy.vo.UpdatedVO
+     * @Author: Guiquan Chen
+     * @Date: 2021/5/24
+     */
+    @PutMapping("/update")
+    public UpdatedVO updateOrder(@Validated @RequestBody OrderUpdateDTO orderUpdateDTO) {
+        LocalParams.setParams(orderUpdateDTO.toString());
+        orderService.updateOrder(orderUpdateDTO);
+        return new UpdatedVO(2);
     }
 
 

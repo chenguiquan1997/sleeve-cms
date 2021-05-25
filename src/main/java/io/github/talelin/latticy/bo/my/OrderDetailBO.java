@@ -41,6 +41,10 @@ public class OrderDetailBO extends BaseEntity {
      */
     private BigDecimal finalTotalPrice;
     /**
+     * 订单主图
+     */
+    private String snapImg;
+    /**
      * 订单中的商品信息集合
      */
     private List<ProductItemBO> productItems;
@@ -68,4 +72,12 @@ public class OrderDetailBO extends BaseEntity {
      * 订单过期时间
      */
     private Date expireTime;
+    /**
+     * 订单概要
+     */
+    private String summaryTitle;
+    /**
+     * 物流单号
+     */
+    private String deliveryNo;
 }

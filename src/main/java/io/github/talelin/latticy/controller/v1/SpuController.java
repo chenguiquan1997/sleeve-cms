@@ -3,6 +3,7 @@ package io.github.talelin.latticy.controller.v1;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.talelin.latticy.bo.my.SpuDetailBO;
 import io.github.talelin.latticy.common.util.CommonUtils;
+import io.github.talelin.latticy.common.util.LocalParams;
 import io.github.talelin.latticy.common.util.PageUtil;
 import io.github.talelin.latticy.dto.my.SpuSaveDTO;
 import io.github.talelin.latticy.dto.my.SpuUpdateDTO;
@@ -81,6 +82,7 @@ public class SpuController {
      */
     @PutMapping("/update")
     public UpdatedVO updateSpu(@RequestBody @Validated SpuUpdateDTO spuUpdateDTO) {
+        LocalParams.setParams(spuUpdateDTO.toString());
         spuService.update(spuUpdateDTO);
         return new UpdatedVO(2);
     }
@@ -94,6 +96,7 @@ public class SpuController {
      */
     @PostMapping("/save")
     public CreatedVO saveSpu(@RequestBody @Validated SpuSaveDTO spuSaveDTO) {
+        LocalParams.setParams(spuSaveDTO.toString());
         spuService.save(spuSaveDTO);
         return new CreatedVO(1);
     }

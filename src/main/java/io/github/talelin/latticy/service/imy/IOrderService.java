@@ -2,6 +2,7 @@ package io.github.talelin.latticy.service.imy;
 
 import io.github.talelin.latticy.bo.my.OrderDetailBO;
 import io.github.talelin.latticy.dto.my.ConditionSearchDTO;
+import io.github.talelin.latticy.dto.my.OrderUpdateDTO;
 import io.github.talelin.latticy.model.my.Page;
 
 import java.util.Map;
@@ -27,4 +28,10 @@ public interface IOrderService {
      * @return
      */
     OrderDetailBO searchOrderDetailById(Long orderId);
+
+    /**
+     * 更新订单信息
+     * @param orderUpdateDTO
+     */
+    void updateOrder(OrderUpdateDTO orderUpdateDTO);
 }

@@ -5,9 +5,15 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import io.github.talelin.latticy.bo.my.*;
 import io.github.talelin.latticy.common.enumeration.my.OrderStatusEnum;
+import io.github.talelin.latticy.common.exception.AddException;
+import io.github.talelin.latticy.common.exception.NotFoundException;
 import io.github.talelin.latticy.common.exception.ParamException;
+import io.github.talelin.latticy.common.exception.UpdateException;
 import io.github.talelin.latticy.dto.my.ConditionSearchDTO;
+import io.github.talelin.latticy.dto.my.OrderUpdateDTO;
+import io.github.talelin.latticy.mapper.my.DeliveryMapper;
 import io.github.talelin.latticy.mapper.my.OrderMapper;
+import io.github.talelin.latticy.model.my.Delivery;
 import io.github.talelin.latticy.model.my.Orders;
 import io.github.talelin.latticy.model.my.Page;
 import io.github.talelin.latticy.service.imy.IOrderService;
@@ -15,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +38,9 @@ public class OrderServiceImpl implements IOrderService {
 
     @Autowired
     private OrderMapper orderMapper;
+
+    @Autowired
+    private DeliveryMapper deliveryMapper;
 
     /**
      * @Description: 根据查询条件，分页查询订单概要数据
@@ -89,6 +99,10 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public OrderDetailBO searchOrderDetailById(Long orderId) {
         Orders order = orderMapper.selectById(orderId);
+        if(order == null) {
+            log.info("当前订单不存在, orderId=[{}]",orderId);
+            throw new NotFoundException(26003);
+        }
         // 先把数据库中json格式的数据，转化为Json对象
         JSONArray j = JSONArray.parseArray(order.getSnapItems());
         JSONObject jsonObject = JSONObject.parseObject(order.getSnapAddress());
@@ -100,6 +114,50 @@ public class OrderServiceImpl implements IOrderService {
         orderDetailBO.setAddress(address);
         orderDetailBO.setProductItems(p);
         orderDetailBO.setStatus(OrderStatusEnum.toType(order.getStatus()).getValue());
+        // todo 一个订单可能会分成多个物流单发货
+        String deliveryNo = deliveryMapper.searchDeliveryNoByOrderNo(order.getOrderNo());
+        orderDetailBO.setDeliveryNo(deliveryNo);
         return orderDetailBO;
+    }
+
+    /**
+     * @Description: 更新订单信息，以及为当前订单创建物流信息
+     * @param orderUpdateDTO
+     * @return: null
+     * @Author: Guiquan Chen
+     * @Date: 2021/5/24
+     */
+    @Transactional
+    public void updateOrder(OrderUpdateDTO orderUpdateDTO) {
+        Orders order = Orders.builder().id(orderUpdateDTO.getId())
+                .orderNo(orderUpdateDTO.getOrderNo())
+                .status(orderUpdateDTO.getStatus())
+                .build();
+        // 根据条件判断当前订单是否存在
+        Integer count = orderMapper.searchOrderByIdAndOrderNo(orderUpdateDTO.getId(),orderUpdateDTO.getOrderNo());
+        if(count < 1) {
+            log.info("当前订单不存在, id=[{}], orderNo=[{}]",orderUpdateDTO.getId(),orderUpdateDTO.getOrderNo());
+            throw new NotFoundException(26003);
+        }
+        try {
+            // 更新订单数据
+            orderMapper.updateOrderStatus(order);
+        }catch (Exception e) {
+            log.error("更新订单数据失败, orderUpdateDTO=[{}]",orderUpdateDTO,e);
+            throw new UpdateException(26004);
+        }
+        if(orderUpdateDTO.getDeliveryNo() != null)  {
+            Delivery delivery = Delivery.builder()
+                    .deliveryNo(orderUpdateDTO.getDeliveryNo())
+                    .orderNo(orderUpdateDTO.getOrderNo())
+                    .build();
+            try {
+                // 为当前订单添加物流信息
+                deliveryMapper.insert(delivery);
+            }catch (Exception e) {
+               log.error("创建物流信息失败, deliveryInfo=[{}]",delivery,e);
+               throw new AddException(28001);
+            }
+        }
     }
 }
