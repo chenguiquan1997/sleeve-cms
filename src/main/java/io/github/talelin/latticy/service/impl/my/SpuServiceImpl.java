@@ -12,6 +12,7 @@ import io.github.talelin.latticy.dto.my.SpuUpdateDTO;
 import io.github.talelin.latticy.mapper.my.*;
 import io.github.talelin.latticy.model.my.*;
 import io.github.talelin.latticy.service.imy.ISpuService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class SpuServiceImpl implements ISpuService {
 
     @Autowired
@@ -38,6 +40,9 @@ public class SpuServiceImpl implements ISpuService {
 
     @Autowired
     private SpuKeyMapper spuKeyMapper;
+
+    @Autowired
+    private SpuSpecMapper spuSpecMapper;
 
     /**
      * 分页查询Spu概要信息
@@ -199,6 +204,24 @@ public class SpuServiceImpl implements ISpuService {
         }catch (Exception e) {
             throw new DeleteException(21002);
         }
+    }
+
+    /**
+     * @Description: 根据 spu id，查询所属 SPU
+     * @param spuId
+     * @return java.util.List<io.github.talelin.latticy.model.my.SpuSpec>
+     * @Author: Guiquan Chen
+     * @Date: 2021/4/21
+     */
+    @Override
+    public List<SpuSpec> searchSpuSpec(Long spuId) {
+        if(spuId == null || spuId < 1) return null;
+        List<SpuSpec> spuSpecs = spuSpecMapper.searchSpuSpecBySpuId(spuId);
+        if(spuSpecs == null || spuSpecs.size() < 1) {
+           log.error("当前SPU无规格，spuId=[{}]",spuId);
+           throw new NotFoundException(24002);
+        }
+        return spuSpecs;
     }
 
 

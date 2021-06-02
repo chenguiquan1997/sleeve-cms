@@ -3,7 +3,7 @@
 lin:
   file:
     # 文件服务域名
-    # http://localhost:5000/
+    # http://localhost:5000/ http://47.96.148.99:5000/
     # http://qocfrob1z.hn-bkt.clouddn.com/
     domain: http://localhost:5000/
     # 七牛

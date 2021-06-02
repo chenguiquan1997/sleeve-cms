@@ -3,16 +3,19 @@ package io.github.talelin.latticy.controller.v1;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.talelin.latticy.bo.my.SpuDetailBO;
 import io.github.talelin.latticy.common.util.CommonUtils;
+import io.github.talelin.latticy.common.util.LocalParams;
 import io.github.talelin.latticy.common.util.PageUtil;
 import io.github.talelin.latticy.dto.my.SpuSaveDTO;
 import io.github.talelin.latticy.dto.my.SpuUpdateDTO;
 import io.github.talelin.latticy.model.my.SpuOutline;
+import io.github.talelin.latticy.model.my.SpuSpec;
 import io.github.talelin.latticy.service.imy.ISpuService;
 import io.github.talelin.latticy.vo.CreatedVO;
 import io.github.talelin.latticy.vo.DeletedVO;
 import io.github.talelin.latticy.vo.PageResponseVO;
 import io.github.talelin.latticy.vo.UpdatedVO;
 import io.github.talelin.latticy.vo.my.SpuOwnSkusVO;
+import io.github.talelin.latticy.vo.my.SpuSpecVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -79,6 +82,7 @@ public class SpuController {
      */
     @PutMapping("/update")
     public UpdatedVO updateSpu(@RequestBody @Validated SpuUpdateDTO spuUpdateDTO) {
+        LocalParams.setParams(spuUpdateDTO.toString());
         spuService.update(spuUpdateDTO);
         return new UpdatedVO(2);
     }
@@ -92,6 +96,7 @@ public class SpuController {
      */
     @PostMapping("/save")
     public CreatedVO saveSpu(@RequestBody @Validated SpuSaveDTO spuSaveDTO) {
+        LocalParams.setParams(spuSaveDTO.toString());
         spuService.save(spuSaveDTO);
         return new CreatedVO(1);
     }
@@ -107,5 +112,18 @@ public class SpuController {
     public DeletedVO removeSpu(@PathVariable("id") @Positive Long id) {
         spuService.removeSpuById(id);
         return new DeletedVO(3);
+    }
+
+    /**
+     * @Description: 根据 spu id，查询所属 SPU
+     * @param spuId
+     * @return java.util.List<io.github.talelin.latticy.vo.my.SpuSpecVO>
+     * @Author: Guiquan Chen
+     * @Date: 2021/4/21
+     */
+    @GetMapping("/spec/{id}")
+    public List<SpuSpecVO> searchSpuSpec(@PathVariable("id") @Positive Long spuId) {
+       List<SpuSpec> spuSpecs = spuService.searchSpuSpec(spuId);
+       return SpuSpecVO.convert(spuSpecs);
     }
 }

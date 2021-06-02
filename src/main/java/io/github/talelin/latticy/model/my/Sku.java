@@ -41,7 +41,7 @@ public class Sku extends BaseEntity implements Serializable {
      */
     private String title;
     /**
-     * 副标题
+     * 所属SPU Id
      */
     private Long spuId;
     /**

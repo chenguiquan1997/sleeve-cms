@@ -9,8 +9,7 @@ import java.util.stream.Stream;
 public enum BannerItemTypeEnum {
     SPU(1,"商品"),
     THEME(2,"主题"),
-    SPU_LIST(3,"商品列表")
-    ;
+    SPU_LIST(3,"商品列表");
 
     private Integer code;
     private String value;

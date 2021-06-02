@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="io.github.talelin.latticy.mapper.my.SkuMapper">
 
-    <!--spu基本映射结果集-->
+    <!--sku基本映射结果集-->
     <resultMap id="BaseResultMap" type="io.github.talelin.latticy.model.my.Sku">
         <id column="id" property="id"></id>
         <result column="price" property="price"></result>
@@ -21,12 +21,45 @@
         <result column="delete_time" property="deleteTime"></result>
     </resultMap>
 
+    <!--sku概要映射结果集-->
+    <resultMap id="skuSummaryResultMap" type="io.github.talelin.latticy.model.my.SkuSummary" extends="BaseResultMap">
+
+        <result column="belong_spu" jdbcType="VARCHAR" property="belongSpu"></result>
+    </resultMap>
+
+    <!--根据spuid 查询所属sku列表-->
     <select id="searchSkuListBySpuId" resultMap="BaseResultMap">
         select sku.id, sku.title
         from sku
         where sku.spu_id = #{spuId} and delete_time is null
     </select>
 
+    <!--分页查询sku-->
+    <select id="searchSkuListByPage" resultMap="skuSummaryResultMap">
+        select sku.id, sku.price, sku.discount_price, sku.title, sku.online, sku.spu_id,
+               sku.img, sku.stock, sku.create_time, spu.title as belong_spu
+        from sku join spu on sku.spu_id = spu.id
+        where sku.delete_time is null limit #{start}, #{count}
+    </select>
 
+    <!--分页查询指定Spu下的sku列表-->
+    <select id="searchSkuListBySpu" resultMap="BaseResultMap">
+        select sku.id, sku.price, sku.discount_price, sku.title, sku.online, sku.spu_id,
+               sku.img, sku.stock, sku.create_time, sku.update_time
+        from sku
+        where sku.spu_id = #{spuId} and sku.delete_time is null
+        order by sku.update_time desc
+        limit #{start}, #{count}
+    </select>
+
+    <!--查询sku的总数量-->
+    <select id="searchAllSkuCount" resultType="java.lang.Integer">
+        select count(*) from sku where delete_time is null
+    </select>
+
+    <!--查询指定spu下的，sku的总数量-->
+    <select id="searchAllSkuCountWithSpu" resultType="java.lang.Integer">
+        select count(*) from sku where spu_id = #{spuId} and delete_time is null
+    </select>
 
 </mapper>

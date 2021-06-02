@@ -3,6 +3,7 @@ package io.github.talelin.latticy.controller.v1;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.talelin.latticy.bo.my.BannerItemsBO;
 import io.github.talelin.latticy.common.mybatis.Page;
+import io.github.talelin.latticy.common.util.LocalParams;
 import io.github.talelin.latticy.common.util.PageUtil;
 import io.github.talelin.latticy.dto.my.BannerDTO;
 import io.github.talelin.latticy.model.my.Banner;
@@ -22,7 +23,7 @@ import javax.validation.constraints.Positive;
 
 
 @RestController
-@RequestMapping("v1/banner")
+@RequestMapping("/v1/banner")
 //必须加当前注解，参数上的校验注解才可以生效,并且这个注解需要加到class上,它就如同一个校验的开关一样
 @Validated
 public class BannerController {
@@ -56,6 +57,7 @@ public class BannerController {
     @PutMapping("/updateBannerBy/{id}")
     public UpdatedVO updateBannerById(@PathVariable(name = "id") @Positive Long id,
                                  @RequestBody @Validated BannerDTO bannerDTO) {
+        LocalParams.setParams(id.toString()+bannerDTO.toString());
         Integer res = bannerService.updateBannerById(id,bannerDTO);
         if(res == 1) {
             return new UpdatedVO(2);
@@ -91,6 +93,7 @@ public class BannerController {
      */
     @PostMapping("/save")
     public CreatedVO saveBanner(@RequestBody @Validated BannerDTO bannerDTO) {
+        LocalParams.setParams(bannerDTO.toString());
         Banner banner = new Banner();
         BeanUtils.copyProperties(bannerDTO,banner);
         bannerService.saveBanner(banner);

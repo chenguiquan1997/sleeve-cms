@@ -3,6 +3,7 @@ package io.github.talelin.latticy.controller.v1;
 import io.github.talelin.latticy.bo.my.CategoryBO;
 import io.github.talelin.latticy.bo.my.CategoryNameBO;
 import io.github.talelin.latticy.common.util.CommonUtils;
+import io.github.talelin.latticy.common.util.LocalParams;
 import io.github.talelin.latticy.dto.my.CategoryDTO;
 import io.github.talelin.latticy.dto.my.CategorySaveDTO;
 import io.github.talelin.latticy.dto.my.GridUpdateDTO;
@@ -84,6 +85,7 @@ public class CategoryController {
      */
     @PutMapping("/update")
     public UpdatedVO updateCategoryInfoById(@RequestBody @Validated CategoryDTO categoryDTO) {
+        LocalParams.setParams(categoryDTO.toString());
         categoryService.update(categoryDTO);
         return new UpdatedVO(2);
     }
@@ -124,6 +126,7 @@ public class CategoryController {
      */
     @PostMapping("/save")
     public CreatedVO save(@RequestBody @Validated CategorySaveDTO categorySaveDTO) {
+        LocalParams.setParams(categorySaveDTO.toString());
         categoryService.save(categorySaveDTO);
         return new CreatedVO(1);
     }
@@ -160,6 +163,7 @@ public class CategoryController {
      */
     @PutMapping("/grid/add/{id}")
     public CreatedVO addToGrid(@PathVariable(name = "id") @NotNull @Positive Long id) {
+        LocalParams.setParams(id.toString());
         categoryService.addCategoryToGrid(id);
         return new CreatedVO(21004);
     }
@@ -197,6 +201,7 @@ public class CategoryController {
      */
     @PutMapping("/grid/update")
     public UpdatedVO updateGridById(@RequestBody @Validated GridUpdateDTO gridUpdateDTO) {
+        LocalParams.setParams(gridUpdateDTO.toString());
         categoryService.updateGridById(gridUpdateDTO);
         return new UpdatedVO(2);
     }
@@ -210,6 +215,7 @@ public class CategoryController {
      */
     @PutMapping("/grid/remove/{id}")
     public DeletedVO removeGridById(@PathVariable("id") @NotNull @Positive Long id) {
+       LocalParams.setParams(id.toString());
        categoryService.removeGridById(id);
        return new DeletedVO(3);
     }

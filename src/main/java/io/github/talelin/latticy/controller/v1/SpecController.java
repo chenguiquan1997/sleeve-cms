@@ -1,6 +1,7 @@
 package io.github.talelin.latticy.controller.v1;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.github.talelin.latticy.common.util.LocalParams;
 import io.github.talelin.latticy.common.util.PageUtil;
 import io.github.talelin.latticy.dto.my.SpecKeyDTO;
 import io.github.talelin.latticy.dto.my.SpecKeyUpdateDTO;
@@ -78,6 +79,7 @@ public class SpecController {
      */
     @PostMapping("/key/save")
     public CreatedVO saveSpecKey(@RequestBody @Validated SpecKeyDTO specKeyDTO) {
+        LocalParams.setParams(specKeyDTO.toString());
         specKeyService.save(specKeyDTO);
         return new CreatedVO(1);
     }
@@ -89,6 +91,7 @@ public class SpecController {
      */
     @PostMapping("/value/save")
     public CreatedVO saveSpecValue(@RequestBody SpecValueDTO specValueDTO) {
+        LocalParams.setParams(specValueDTO.toString());
         specValueService.save(specValueDTO);
         return new CreatedVO(1);
     }
@@ -128,8 +131,9 @@ public class SpecController {
      */
     @PutMapping("/key/update")
     public UpdatedVO updateSpecKey(@RequestBody @Validated SpecKeyUpdateDTO specKeyUpdateDTO) {
-      specKeyService.update(specKeyUpdateDTO);
-      return new UpdatedVO(2);
+        LocalParams.setParams(specKeyUpdateDTO.toString());
+          specKeyService.update(specKeyUpdateDTO);
+          return new UpdatedVO(2);
     }
 
     /**
@@ -192,6 +196,19 @@ public class SpecController {
     public List<SpecSketchVO> geteSpecsSummaryByIds(@RequestParam(name = "ids") @NotEmpty @NotNull String ids) {
         List<SpecKey> specKeys = specKeyService.getSpecSummaryByIds(ids);
         return SpecSketchVO.convert(specKeys);
+    }
+
+    /**
+     * @Description: 根据规格id，获取所有对应的规格值数据
+     * @param id
+     * @return java.util.List<io.github.talelin.latticy.vo.my.SpecValueVO>
+     * @Author: Guiquan Chen
+     * @Date: 2021/4/13
+     */
+    @GetMapping("/values/{id}")
+    public List<SpecValueVO> getSpecValues(@PathVariable("id") @Positive Long id) {
+       List<SpecValue> specValues = specValueService.getSpecValues(id);
+       return SpecValueVO.convert(specValues);
     }
 
 }

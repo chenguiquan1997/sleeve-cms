@@ -1,5 +1,6 @@
 package io.github.talelin.latticy.controller.v1;
 
+import io.github.talelin.latticy.common.util.LocalParams;
 import io.github.talelin.latticy.dto.my.BannerItemDTO;
 import io.github.talelin.latticy.model.my.BannerItem;
 import io.github.talelin.latticy.service.imy.IBannerItemService;
@@ -52,6 +53,7 @@ public class BannerItemController {
     public UpdatedVO updateItem(@RequestBody @Validated BannerItemDTO bannerItemDTO,
                                 @PathVariable("id") @NotNull(message = "{id.notNull}")
                                         Long id) {
+        LocalParams.setParams(id.toString()+bannerItemDTO.toString());
         bannerItemService.updateById(id,bannerItemDTO);
         return new UpdatedVO(2);
     }
@@ -83,6 +85,7 @@ public class BannerItemController {
      */
     @PostMapping("/add")
     public CreatedVO addItem(@Validated @RequestBody BannerItemDTO bannerItemDTO) {
+        LocalParams.setParams(bannerItemDTO.toString());
         Boolean flag = bannerItemService.save(bannerItemDTO);
         if(flag) {
             return new CreatedVO(21004);
