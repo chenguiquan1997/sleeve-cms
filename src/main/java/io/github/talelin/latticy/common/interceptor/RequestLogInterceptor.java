@@ -49,5 +49,6 @@ public class RequestLogInterceptor extends HandlerInterceptorAdapter {
                     System.currentTimeMillis() - startTime.get()
             );
         }
+        LocalParams.removeParams();
     }
 }

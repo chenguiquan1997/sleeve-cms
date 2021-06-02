@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.talelin.latticy.mapper.my.MinUserMapper">
+
+    <resultMap id="BaseResultMap" type="io.github.talelin.latticy.model.my.MinUser">
+        <id column="id" jdbcType="BIGINT" property="id" javaType="Long"></id>
+        <result column="nick_name" jdbcType="VARCHAR" property="nickName" javaType="String"></result>
+        <result column="city" jdbcType="VARCHAR" property="city" javaType="String"></result>
+        <result column="province" jdbcType="VARCHAR" property="province" javaType="String"></result>
+        <result column="country" jdbcType="VARCHAR" property="country" javaType="String"></result>
+        <result column="gender" jdbcType="INTEGER" property="gender" javaType="INTEGER"></result>
+        <result column="avatar_url" jdbcType="VARCHAR" property="avatarUrl" javaType="String"></result>
+        <result column="create_time" property="createTime"></result>
+        <result column="update_time" property="updateTime"></result>
+        <result column="delete_time" property="deleteTime"></result>
+    </resultMap>
+
+    <select id="searchUserByNickName" resultMap="BaseResultMap">
+        select * from min_pro_user where nick_name = #{nickName}
+    </select>
+</mapper>

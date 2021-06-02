@@ -22,4 +22,8 @@ public class LocalParams {
     public static String getParams() {
        return threadLocalParams.get().get("param");
     }
+
+    public static void removeParams() {
+        threadLocalParams.remove();
+    }
 }
