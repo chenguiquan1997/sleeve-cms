@@ -122,7 +122,7 @@ public class OrderServiceImpl implements IOrderService {
 
     /**
      * @Description: 更新订单信息，以及为当前订单创建物流信息
-     * @param orderUpdateDTO
+     * @param orderUpdateDTO 订单数据参数
      * @return: null
      * @Author: Guiquan Chen
      * @Date: 2021/5/24

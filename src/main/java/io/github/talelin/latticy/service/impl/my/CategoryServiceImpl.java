@@ -66,8 +66,7 @@ public class CategoryServiceImpl implements ICategoryService {
            return new Page<List>();
        }
        List<Category> categories = categoryMapper.searchAllOneLevelCategories(pageMap.get("startCount"),size);
-       Page<List<Category>> categoryPage = new Page<>(count,categories,pageMap.get("currPage"),size);
-       return categoryPage;
+       return new Page<Category>(count,categories,pageMap.get("currPage"),size);
     }
 
     /**
@@ -84,8 +83,7 @@ public class CategoryServiceImpl implements ICategoryService {
             return new Page<List>();
         }
         List<Category> categories = categoryMapper.searchTwoLevelByParentId(pageMap.get("startCount"),size, parentId);
-        Page<List<Category>> categoryPage = new Page<>(count,categories,pageMap.get("currPage"),size);
-        return categoryPage;
+        return new Page<>(count,categories,pageMap.get("currPage"),size);
     }
 
     /**

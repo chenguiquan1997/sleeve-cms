@@ -1,6 +1,10 @@
 package io.github.talelin.latticy.service.imy;
 
+import io.github.talelin.latticy.bo.my.MinUserBO;
 import io.github.talelin.latticy.dto.my.MinUserDTO;
+import io.github.talelin.latticy.model.my.Page;
+
+import java.util.Map;
 
 /**
  * @Author Guiquan Chen
@@ -17,5 +21,5 @@ public interface IMinUserService {
 
     boolean searchMinUserByName(String nickName);
 
-    // void searchAllByPage();
+    Page<MinUserBO> searchAllByPage(Map<String,Integer> pageMap, Integer size);
 }
