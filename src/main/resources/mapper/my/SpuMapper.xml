@@ -97,4 +97,10 @@
        update spu set delete_time = now() where id = #{id} and delete_time is null
     </delete>
 
+    <!--查询 spu 的 id 和 title 字段，用于构建 luence 索引-->
+    <select id="searchIdAndTitle" resultMap="BaseResultMap">
+        select id, title from spu where delete_time is null
+    </select>
+
+
 </mapper>
