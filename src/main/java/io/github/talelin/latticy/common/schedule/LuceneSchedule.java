@@ -62,6 +62,7 @@ public class LuceneSchedule {
         Analyzer analyzer=new HanLPAnalyzer();
         // 创建索引配置对象
         IndexWriterConfig config = new IndexWriterConfig(analyzer);
+        config.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
         IndexWriter writer = null;
         try {
             // 创建索引写入器
