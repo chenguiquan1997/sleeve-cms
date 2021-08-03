@@ -38,7 +38,6 @@ public class SpuSaveDTO {
      */
     @DecimalMax(value = "99999.99", message = "商品折扣价不可高于99999.99")
     @DecimalMin(value = "00.00", message = "商品折扣价不可低于0.00")
-    @NotNull
     private BigDecimal discountPrice;
     /**
      * 父级分类 id
