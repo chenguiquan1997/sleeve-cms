@@ -1,6 +1,8 @@
 package io.github.talelin.latticy.controller.v1;
 
 import io.github.talelin.latticy.bo.my.MinUserBO;
+import io.github.talelin.latticy.common.util.CommonUtils;
+import io.github.talelin.latticy.common.util.LocalParams;
 import io.github.talelin.latticy.dto.my.MinUserDTO;
 import io.github.talelin.latticy.service.imy.IMinUserService;
 import io.github.talelin.latticy.vo.CreatedVO;
@@ -11,6 +13,7 @@ import io.github.talelin.latticy.model.my.Page;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.util.Map;
 
 /**
  * @Author Guiquan Chen
@@ -32,7 +35,8 @@ public class MinProUserController {
                               @Min(value = 1) Integer page,
                                          @RequestParam(name = "count", defaultValue = "10")
                               @Min(value = 3) @Max(value = 30) Integer count) {
-        return null;
+        Map<String,Integer> pageMap = CommonUtils.convertPageParams(page,count);
+        return minUserService.searchAllByPage(pageMap,count);
     }
 
     /**

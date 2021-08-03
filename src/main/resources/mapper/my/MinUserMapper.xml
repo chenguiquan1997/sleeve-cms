@@ -10,12 +10,22 @@
         <result column="country" jdbcType="VARCHAR" property="country" javaType="String"></result>
         <result column="gender" jdbcType="INTEGER" property="gender" javaType="INTEGER"></result>
         <result column="avatar_url" jdbcType="VARCHAR" property="avatarUrl" javaType="String"></result>
-        <result column="create_time" property="createTime"></result>
-        <result column="update_time" property="updateTime"></result>
-        <result column="delete_time" property="deleteTime"></result>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" javaType="Date"></result>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" javaType="Date"></result>
+        <result column="delete_time" jdbcType="TIMESTAMP" property="deleteTime" javaType="Date"></result>
     </resultMap>
 
     <select id="searchUserByNickName" resultMap="BaseResultMap">
         select * from min_pro_user where nick_name = #{nickName}
+    </select>
+
+    <select id="getUserListByPage" resultMap="BaseResultMap">
+        select *
+        from min_pro_user m
+        where delete_time is null limit #{startCount}, #{size}
+    </select>
+
+    <select id="getUserTotalCount" resultType="java.lang.Integer">
+        select count(*) from min_pro_user where delete_time is null
     </select>
 </mapper>

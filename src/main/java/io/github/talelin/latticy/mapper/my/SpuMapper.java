@@ -51,4 +51,10 @@ public interface SpuMapper extends BaseMapper<Spu> {
      * @param id
      */
     void removeSpuById(@Param("id") Long id);
+
+    /**
+     * 查询 spu 的 id 和 title 字段，用于构建 luence 索引
+     * @return
+     */
+    List<Spu> searchIdAndTitle();
 }

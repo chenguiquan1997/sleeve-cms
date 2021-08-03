@@ -16,6 +16,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class MinUser extends BaseEntity{
 
+    private Long id;
+
     private String nickName;
 
     private Integer gender;

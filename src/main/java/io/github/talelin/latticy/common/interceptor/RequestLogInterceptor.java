@@ -33,10 +33,20 @@ public class RequestLogInterceptor extends HandlerInterceptorAdapter {
         super.afterCompletion(request, response, handler, ex);
         // GET 请求的打印日志的方式
         if(request.getMethod().equals("GET") || request.getMethod().equals("DELETE")) {
-            log.info("[{}] -> [{}] params: [{}] from: {} costs: {}ms",
+            System.out.println("getQueryString：");
+            System.out.println(request.getQueryString());
+            if(request.getQueryString() != null) {
+                log.info("[{}] -> [{}] params: [{}] from: {} costs: {}ms",
+                        request.getMethod(),
+                        request.getServletPath(),
+                        URLDecoder.decode(request.getQueryString(),"utf-8"),
+                        request.getRemoteAddr(),
+                        System.currentTimeMillis() - startTime.get()
+                );
+            }
+            log.info("[{}] -> [{}] from: {} costs: {}ms",
                     request.getMethod(),
                     request.getServletPath(),
-                    URLDecoder.decode(request.getQueryString(),"utf-8"),
                     request.getRemoteAddr(),
                     System.currentTimeMillis() - startTime.get()
             );

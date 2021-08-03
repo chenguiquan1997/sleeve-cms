@@ -33,6 +33,10 @@ logging:
     # SQL日志记录
     io.github.talelin.latticy.mapper: debug
 
+task:
+  # 秒 分 时 日 月 周
+  lucene-time: '*/5 * * * * ?'
+
 
 
 
